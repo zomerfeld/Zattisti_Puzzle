@@ -64,7 +64,7 @@ function update() {
     checkWin(); 
 }
 
-    function onKeyDown(event) {
+    function onKeyDown(event) { //we know we're ignoring the arrays we crated for this. maybe later.
         deltaRow = 0;
         deltaColumn = 0;
 
@@ -81,6 +81,18 @@ function update() {
         break;
         case 40: // Down Arrow
         mario.moveDown();
+        break;
+        case 65: // Left
+        peach.moveLeft();
+        break;
+        case 87: // Right
+        peach.moveRight();
+        break;
+        case 68: // UP
+        peach.moveUp();
+        break;
+        case 83: // Down 
+        peach.moveDown();
         break;
 
         // default:
@@ -105,7 +117,7 @@ function update() {
 
 function Player(name, color, ogLocation, keys) {
 
-    playerLocation = cLocation;
+    this.playerLocation = cLocation;
     this.name = name;
     this.color = color;
     this.ogLocation = ogLocation;
@@ -135,7 +147,7 @@ function Player(name, color, ogLocation, keys) {
         deltaRow = 0;
         deltaColumn = 0;
         //Put a sound here? Consequences
-        console.log('blocked buddy!');
+        console.log('***BLOCKED***');
     }
 
     playerLocation = {
@@ -144,7 +156,79 @@ function Player(name, color, ogLocation, keys) {
     }
 
     console.log('moved right');
-    console.log(playerLocation);
+    // console.log(playerLocation);
+}
+
+    this.moveLeft = function() {
+
+        deltaColumn = -1;
+
+    // Look at the location we want to move to. if it's out of bounds or
+    // there's a wall, cancel the move.
+    var nr = playerLocation.row + deltaRow;
+    var nc = playerLocation.column + deltaColumn;
+    if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
+        deltaRow = 0;
+        deltaColumn = 0;
+        //Put a sound here? Consequences
+        console.log('***BLOCKED***');
+    }
+
+    playerLocation = {
+        'row': playerLocation.row + deltaRow,
+        'column': playerLocation.column + deltaColumn
+    }
+
+    console.log('moved left');
+    // console.log(playerLocation);
+}
+
+    this.moveUp = function() {
+
+        deltaRow = -1;
+
+    // Look at the location we want to move to. if it's out of bounds or
+    // there's a wall, cancel the move.
+    var nr = playerLocation.row + deltaRow;
+    var nc = playerLocation.column + deltaColumn;
+    if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
+        deltaRow = 0;
+        deltaColumn = 0;
+        //Put a sound here? Consequences
+        console.log('***BLOCKED***');
+    }
+
+    playerLocation = {
+        'row': playerLocation.row + deltaRow,
+        'column': playerLocation.column + deltaColumn
+    }
+
+    console.log('moved up');
+    // console.log(playerLocation);
+}
+
+    this.moveDown = function() {
+
+        deltaRow = +1;
+
+    // Look at the location we want to move to. if it's out of bounds or
+    // there's a wall, cancel the move.
+    var nr = playerLocation.row + deltaRow;
+    var nc = playerLocation.column + deltaColumn;
+    if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
+        deltaRow = 0;
+        deltaColumn = 0;
+        //Put a sound here? Consequences
+        console.log('***BLOCKED***');
+    }
+
+    playerLocation = {
+        'row': playerLocation.row + deltaRow,
+        'column': playerLocation.column + deltaColumn
+    }
+
+    console.log('moved down');
+    // console.log(playerLocation);
 }
 
 }
