@@ -60,13 +60,11 @@ function update() {
     drawPath();
     drawEnd();
     mario.drawPlayer();
-    drawPlayerZ(mario.color);
+    peach.drawPlayer();
     checkWin(); 
 }
 
     function onKeyDown(event) { //we know we're ignoring the arrays we crated for this. maybe later.
-        deltaRow = 0;
-        deltaColumn = 0;
 
         switch (event.keyCode) {
         case 37: // Left Arrow
@@ -85,10 +83,10 @@ function update() {
         case 65: // Left
         peach.moveLeft();
         break;
-        case 87: // Right
+        case 68: // Right
         peach.moveRight();
         break;
-        case 68: // UP
+        case 87: // UP
         peach.moveUp();
         break;
         case 83: // Down 
@@ -117,6 +115,9 @@ function update() {
 
 function Player(name, color, ogLocation, keys) {
 
+
+
+
     this.playerLocation = cLocation;
     this.name = name;
     this.color = color;
@@ -132,27 +133,28 @@ function Player(name, color, ogLocation, keys) {
         var y = wallStartY + playerLocation.row * wallSize + wallSize/2;  
 
         drawCircle(x, y, wallSize/3, playerColor, wallSize/12, playerBorder); //draw the player.
-
+        this.deltaRow = 0;
+        this.deltaColumn = 0;
     };
 
     this.moveRight = function() {
 
-        deltaColumn = +1;
+        this.deltaColumn = +1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
-    var nr = playerLocation.row + deltaRow;
-    var nc = playerLocation.column + deltaColumn;
+    var nr = playerLocation.row + this.deltaRow;
+    var nc = playerLocation.column + this.deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-        deltaRow = 0;
-        deltaColumn = 0;
+        this.deltaRow = 0;
+        this.deltaColumn = 0;
         //Put a sound here? Consequences
         console.log('***BLOCKED***');
     }
 
     playerLocation = {
-        'row': playerLocation.row + deltaRow,
-        'column': playerLocation.column + deltaColumn
+        'row': playerLocation.row + this.deltaRow,
+        'column': playerLocation.column + this.deltaColumn
     }
 
     console.log('moved right');
@@ -161,7 +163,7 @@ function Player(name, color, ogLocation, keys) {
 
     this.moveLeft = function() {
 
-        deltaColumn = -1;
+        this.deltaColumn = -1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
@@ -185,7 +187,7 @@ function Player(name, color, ogLocation, keys) {
 
     this.moveUp = function() {
 
-        deltaRow = -1;
+        this.deltaRow = -1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
@@ -209,7 +211,7 @@ function Player(name, color, ogLocation, keys) {
 
     this.moveDown = function() {
 
-        deltaRow = +1;
+        this.deltaRow = +1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
