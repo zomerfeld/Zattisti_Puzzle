@@ -12,20 +12,20 @@
 //
 //         --------------
 var maze    = 'AC       # #'
-+ ' # ### # #  '
-+ ' ### # #### '
-+ ' #     #    '
-+ '## ##### ## '
-+ '   #     #  '
-+ '## ## ##### '
-+ '       #    '
-+ ' #### ## ###'
-+ '    # #    B';
+            + ' # ### # #  '
+            + ' ### # #### '
+            + ' #     #    '
+            + '## ##### ## '
+            + '   #     #  '
+            + '## ## ##### '
+            + '       #    '
+            + ' #### ## ###'
+            + '    # #    B';
             //         --------------
 
 
-            var columns = 12;
-            var rows = 10;
+var columns = 12;
+var rows = 10;
 
 
 //COLORS 
@@ -35,7 +35,7 @@ var endColor = 0xF2F26F;
 var playerColor = 0xF04155;
 var playerBorder = 0xFFF7BD;
 
-var startLocation, endLocation;  //LOCATION
+var startLocation, endLocation, playerLocation;  //LOCATION
 var wallStartX, wallStartY, wallSize; // unclear
 var endAngle;  //Rotation of hexagon
 var playerWonHooray;
@@ -59,73 +59,32 @@ function update() {
     graphics.clear(); //clears the graphics
     drawPath();
     drawEnd();
-    mario.drawPlayer();
+    drawPlayer();
     drawPlayerZ(mario.color);
     checkWin(); 
 }
 
-    function onKeyDown(event) {
-        deltaRow = 0;
-        deltaColumn = 0;
-
-        switch (event.keyCode) {
+function onKeyDown(event) {
+    deltaRow = 0;
+    deltaColumn = 0;
+    
+    switch (event.keyCode) {
         case 37: // Left Arrow
-        mario.moveLeft();
-        console.log('left');
+        deltaColumn = -1;
         break;
         case 38: // Up Arrow
-        mario.moveUp();
+        deltaRow = -1;
         break;
         case 39: // Right Arrow
-        mario.moveRight();
+        deltaColumn = +1;
         break;
         case 40: // Down Arrow
-        mario.moveDown();
+        deltaRow = +1;
         break;
 
         // default:
         //     console.log (event.keyCode);
     }
-
-    // Look at the location we want to move to. if it's out of bounds or
-    // there's a wall, cancel the move.
-    // var nr = playerLocation.row + deltaRow;
-    // var nc = playerLocation.column + deltaColumn;
-    // if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-    //     deltaRow = 0;
-    //     deltaColumn = 0;
-    //     //Put a sound here? Consequences
-    // }
-
-    // playerLocation = {
-    //     'row': playerLocation.row + deltaRow,
-    //     'column': playerLocation.column + deltaColumn
-    // }
-}
-
-function Player(name, color, ogLocation, keys) {
-
-    playerLocation = cLocation;
-    this.name = name;
-    this.color = color;
-    this.ogLocation = ogLocation;
-    this.keys = keys;
-    console.log('name' + name + ' player color: ' + color + ' ogLocation: ' + ogLocation + ' keys: ' + keys);
-
-
-
-    this.drawPlayer = function() {
-        //centers the shape
-        var x = wallStartX + playerLocation.column * wallSize + wallSize/2;
-        var y = wallStartY + playerLocation.row * wallSize + wallSize/2;  
-
-        drawCircle(x, y, wallSize/3, playerColor, wallSize/12, playerBorder); //draw the player.
-
-    };
-
-    this.moveRight = function() {
-
-        deltaColumn = +1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
@@ -135,17 +94,21 @@ function Player(name, color, ogLocation, keys) {
         deltaRow = 0;
         deltaColumn = 0;
         //Put a sound here? Consequences
-        console.log('blocked buddy!');
     }
 
     playerLocation = {
         'row': playerLocation.row + deltaRow,
         'column': playerLocation.column + deltaColumn
-    }
-
-    console.log('moved right');
-    console.log(playerLocation);
+    };
 }
+
+function Player(name, color, ogLocation, keys) {
+
+    this.name = name;
+    this.color = color;
+    this.ogLocation = ogLocation;
+    this.keys = keys;
+    console.log('name' + name + ' player color: ' + color + ' ogLocation: ' + ogLocation + ' keys: ' + keys);
 
 }
 
@@ -204,6 +167,14 @@ function drawEnd() {
     var y = wallStartY + endLocation.row * wallSize + wallSize/2;
     endAngle -= 1;
     drawPolygon(x, y, wallSize/3, 5, endAngle, endColor);
+}
+
+function drawPlayer() {
+    //centers the shape
+    var x = wallStartX + playerLocation.column * wallSize + wallSize/2;
+    var y = wallStartY + playerLocation.row * wallSize + wallSize/2;  
+
+    drawCircle(x, y, wallSize/3, playerColor, wallSize/12, playerBorder); //draw the player.
 }
 
 function drawPlayerZ(color) {
