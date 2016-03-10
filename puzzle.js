@@ -133,28 +133,28 @@ function Player(name, color, ogLocation, keys) {
         var y = wallStartY + playerLocation.row * wallSize + wallSize/2;  
 
         drawCircle(x, y, wallSize/3, playerColor, wallSize/12, playerBorder); //draw the player.
-        this.deltaRow = 0;
-        this.deltaColumn = 0;
+        deltaRow = 0;
+        deltaColumn = 0;
     };
 
     this.moveRight = function() {
 
-        this.deltaColumn = +1;
+        deltaColumn = +1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
-    var nr = playerLocation.row + this.deltaRow;
-    var nc = playerLocation.column + this.deltaColumn;
+    var nr = playerLocation.row + deltaRow;
+    var nc = playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-        this.deltaRow = 0;
-        this.deltaColumn = 0;
+        deltaRow = 0;
+        deltaColumn = 0;
         //Put a sound here? Consequences
         console.log('***BLOCKED***');
     }
 
     playerLocation = {
-        'row': playerLocation.row + this.deltaRow,
-        'column': playerLocation.column + this.deltaColumn
+        'row': playerLocation.row + deltaRow,
+        'column': playerLocation.column + deltaColumn
     }
 
     console.log('moved right');
