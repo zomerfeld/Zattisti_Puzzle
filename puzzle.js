@@ -46,6 +46,11 @@ function setup() {
     playerLocation = {'row':startLocation.row, 'column':startLocation.column}; 
     playerWonHooray = false; //Definiton of win condition
     endAngle = -90;
+
+    var mario = new Player('Mario', 0x61D4FA, 'A', [37,38,39,40]);
+    var peach = new Player('Peach', 0xff5256, 'B', [65,87,68,83]);
+
+
 }
 
 function update() {
@@ -73,6 +78,9 @@ function onKeyDown(event) {
         case 40: // Down Arrow
             deltaRow = +1;
             break;
+
+        // default:
+        //     console.log (event.keyCode);
     }
 
     // Look at the location we want to move to. if it's out of bounds or
@@ -89,6 +97,16 @@ function onKeyDown(event) {
         'row': playerLocation.row + deltaRow,
         'column': playerLocation.column + deltaColumn
     };
+}
+
+var Player = function(name, color, ogLocation, keys) {
+        
+        this.name = name;
+        this.color = color;
+        this.ogLocation = ogLocation;
+        this.keys = keys;
+        console.log('name' + name + ' player color: ' + color + ' ogLocation: ' + ogLocation + ' keys: ' + keys);
+
 }
 
 function buildMaze() { //Runs once in setup
