@@ -11,17 +11,17 @@
 // - a walkable empty space (' ').
 //
 //         --------------
-var maze = 'A        # #'
-         + ' # ### # #  '
-         + ' ### # #### '
-         + ' #     #    '
-         + '## ##### ## '
-         + '   #     #  '
-         + '## ## ##### '
-         + '       #    '
-         + ' #### ## ###'
-         + '    # #    B';
-//         --------------
+var maze    = 'AC       # #'
+            + ' # ### # #  '
+            + ' ### # #### '
+            + ' #     #    '
+            + '## ##### ## '
+            + '   #     #  '
+            + '## ## ##### '
+            + '       #    '
+            + ' #### ## ###'
+            + '    # #    B';
+            //         --------------
 
 
 var columns = 12;
@@ -39,16 +39,18 @@ var startLocation, endLocation, playerLocation;  //LOCATION
 var wallStartX, wallStartY, wallSize; // unclear
 var endAngle;  //Rotation of hexagon
 var playerWonHooray;
+var mario,peach;
 
 function setup() {
     renderer.backgroundColor = wallColor; //The background is the color of the wall
     buildMaze(); // renders the maze
-    playerLocation = {'row':startLocation.row, 'column':startLocation.column}; 
+    playerLocation = {'row':startLocation.row, 'column':startLocation.column}; //takes the columns from startLocation and put them into the array  playerLocation 
+    console.log('playerLocation ' + playerLocation);
     playerWonHooray = false; //Definiton of win condition
     endAngle = -90;
 
-    var mario = new Player('Mario', 0x61D4FA, 'A', [37,38,39,40]);
-    var peach = new Player('Peach', 0xff5256, 'B', [65,87,68,83]);
+    mario = new Player('Mario', 0x0DFF00, 'A', [37,38,39,40]); // L R U D
+    peach = new Player('Peach', 0xff5256, 'B', [65,87,68,83]); // A W D S
 
 
 }
@@ -58,6 +60,7 @@ function update() {
     drawPath();
     drawEnd();
     drawPlayer();
+    drawPlayerZ(mario.color);
     checkWin(); 
 }
 
@@ -67,17 +70,17 @@ function onKeyDown(event) {
     
     switch (event.keyCode) {
         case 37: // Left Arrow
-            deltaColumn = -1;
-            break;
+        deltaColumn = -1;
+        break;
         case 38: // Up Arrow
-            deltaRow = -1;
-            break;
+        deltaRow = -1;
+        break;
         case 39: // Right Arrow
-            deltaColumn = +1;
-            break;
+        deltaColumn = +1;
+        break;
         case 40: // Down Arrow
-            deltaRow = +1;
-            break;
+        deltaRow = +1;
+        break;
 
         // default:
         //     console.log (event.keyCode);
@@ -99,13 +102,13 @@ function onKeyDown(event) {
     };
 }
 
-var Player = function(name, color, ogLocation, keys) {
-        
-        this.name = name;
-        this.color = color;
-        this.ogLocation = ogLocation;
-        this.keys = keys;
-        console.log('name' + name + ' player color: ' + color + ' ogLocation: ' + ogLocation + ' keys: ' + keys);
+function Player(name, color, ogLocation, keys) {
+
+    this.name = name;
+    this.color = color;
+    this.ogLocation = ogLocation;
+    this.keys = keys;
+    console.log('name' + name + ' player color: ' + color + ' ogLocation: ' + ogLocation + ' keys: ' + keys);
 
 }
 
@@ -125,9 +128,14 @@ function buildMaze() { //Runs once in setup
             var i = (r * columns) + c;
             var ch = maze[i];
             if (ch == 'A') {
-                startLocation = {'row':r, 'column':c};
+                startLocation = {'row':r, 'column':c}; // Defines where ogLocation is. Writes down "this is start location"
+                console.log('startLocation: ' + startLocation);
             } else if (ch == 'B') {
-                endLocation = {'row':r, 'column':c};
+                endLocation = {'row':r, 'column':c}; // Defines where game ends. Not going to be peach anymore.
+            } else if (ch == 'C') {
+                cLocation = {'row':r, 'column':c}; // SOmething else
+            } else if (ch == 'P') {
+                peachLocation = {'row':r, 'column':c}; // Peach Start
             }
         }
     }
@@ -140,7 +148,7 @@ function drawPath() {
             var ch = maze[i];
             // The start and end locations are also on the path,
             // so check for them too.
-            if (ch==' ' || ch=='A' || ch=='B') { //if space, draw the path. 
+            if (ch==' ' || ch=='A' || ch=='B' || ch=='P' || ch=='C') { //if space, draw the path. 
                 var x = wallStartX + c * wallSize;
                 var y = wallStartY + r * wallSize;
                 drawRect(x, y, wallSize, wallSize, pathColor);
@@ -169,10 +177,19 @@ function drawPlayer() {
     drawCircle(x, y, wallSize/3, playerColor, wallSize/12, playerBorder); //draw the player.
 }
 
+function drawPlayerZ(color) {
+    //centers the shape
+    var x = wallStartX + cLocation.column * wallSize + wallSize/2;
+    var y = wallStartY + cLocation.row * wallSize + wallSize/2;  
+
+    drawCircle(x, y, wallSize/3, color, wallSize/12, playerBorder); //draw the player.
+}
+
+
 function isWall(r, c) { //this funciton checks if there's a wall, used in the moving action for the player and blocks it. 
-    var i = (r * columns) + c;
-    var ch = maze[i];
-    return ((ch != ' ') && (ch != 'A') && (ch != 'B'));
+var i = (r * columns) + c;
+var ch = maze[i];
+return ((ch != ' ') && (ch != 'A') && (ch != 'B') && (ch != 'C') && (ch != 'P'));
 }
 
 function checkWin() { //changes the conditions if the player won.
