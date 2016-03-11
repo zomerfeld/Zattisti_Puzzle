@@ -163,22 +163,22 @@ function Player(name, color, ogLocation, keys) {
 
 this.moveLeft = function() {
 
-    this.deltaColumn = -1;
+    deltaColumn = -1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
-    var nr = playerLocation.row + deltaRow;
-    var nc = playerLocation.column + deltaColumn;
+    var nr = this.playerLocation.row + deltaRow;
+    var nc = this.playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
         deltaRow = 0;
         deltaColumn = 0;
         //Put a sound here? Consequences
         console.log('***BLOCKED***');
-    };
+    }
 
-    playerLocation = {
-        'row': playerLocation.row + deltaRow,
-        'column': playerLocation.column + deltaColumn
+    this.playerLocation = {
+        'row': this.playerLocation.row + deltaRow,
+        'column': this.playerLocation.column + deltaColumn
     }
 
     console.log('moved left');
@@ -187,12 +187,12 @@ this.moveLeft = function() {
 
 this.moveUp = function() {
 
-    this.deltaRow = -1;
+    deltaRow = -1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
-    var nr = playerLocation.row + deltaRow;
-    var nc = playerLocation.column + deltaColumn;
+    var nr = this.playerLocation.row + deltaRow;
+    var nc = this.playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
         deltaRow = 0;
         deltaColumn = 0;
@@ -200,9 +200,9 @@ this.moveUp = function() {
         console.log('***BLOCKED***');
     }
 
-    playerLocation = {
-        'row': playerLocation.row + deltaRow,
-        'column': playerLocation.column + deltaColumn
+    this.playerLocation = {
+        'row': this.playerLocation.row + deltaRow,
+        'column': this.playerLocation.column + deltaColumn
     }
 
     console.log('moved up');
@@ -211,12 +211,12 @@ this.moveUp = function() {
 
 this.moveDown = function() {
 
-    this.deltaRow = +1;
+    deltaRow = +1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
-    var nr = playerLocation.row + deltaRow;
-    var nc = playerLocation.column + deltaColumn;
+    var nr = this.playerLocation.row + deltaRow;
+    var nc = this.playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
         deltaRow = 0;
         deltaColumn = 0;
@@ -224,9 +224,9 @@ this.moveDown = function() {
         console.log('***BLOCKED***');
     }
 
-    playerLocation = {
-        'row': playerLocation.row + deltaRow,
-        'column': playerLocation.column + deltaColumn
+    this.playerLocation = {
+        'row': this.playerLocation.row + deltaRow,
+        'column': this.playerLocation.column + deltaColumn
     }
 
     console.log('moved down');
