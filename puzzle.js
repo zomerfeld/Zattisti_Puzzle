@@ -301,13 +301,6 @@ function drawEnd() {
     // drawPolygon(x, y, wallSize/3, 5, endAngle, endColor);
 }
 
-function drawPlayerZ(color) {
-    //centers the shape
-    var x = wallStartX + cLocation.column * wallSize + wallSize/2;
-    var y = wallStartY + cLocation.row * wallSize + wallSize/2;  
-
-    drawCircle(x, y, wallSize/3, color, wallSize/12, playerBorder); //draw the player.
-}
 
 
 function isWall(r, c) { //this funciton checks if there's a wall, used in the moving action for the player and blocks it. 
