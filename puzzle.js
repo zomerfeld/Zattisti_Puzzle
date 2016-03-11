@@ -64,7 +64,7 @@ function update() {
     checkWin(); 
 }
 
-    function onKeyDown(event) { //we know we're ignoring the arrays we crated for this. maybe later.
+  function onKeyDown(event) { //we know we're ignoring the arrays we crated for this. maybe later.
 
     switch (event.keyCode) {
         case 37: // Left Arrow
@@ -129,8 +129,8 @@ function Player(name, color, ogLocation, keys) {
 
     this.drawPlayer = function() { //Draws the player
         //centers the shape
-        var x = wallStartX + playerLocation.column * wallSize + wallSize/2;
-        var y = wallStartY + playerLocation.row * wallSize + wallSize/2;  
+        var x = wallStartX + this.playerLocation.column * wallSize + wallSize/2;
+        var y = wallStartY + this.playerLocation.row * wallSize + wallSize/2;  
 
         drawCircle(x, y, wallSize/3, playerColor, wallSize/12, playerBorder); //draw the player.
         deltaRow = 0;
@@ -143,8 +143,8 @@ function Player(name, color, ogLocation, keys) {
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
-    var nr = playerLocation.row + deltaRow;
-    var nc = playerLocation.column + deltaColumn;
+    var nr = this.playerLocation.row + deltaRow;
+    var nc = this.playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
         deltaRow = 0;
         deltaColumn = 0;
@@ -152,9 +152,9 @@ function Player(name, color, ogLocation, keys) {
         console.log('***BLOCKED***');
     }
 
-    playerLocation = {
-        'row': playerLocation.row + deltaRow,
-        'column': playerLocation.column + deltaColumn
+    this.playerLocation = {
+        'row': this.playerLocation.row + deltaRow,
+        'column': this.playerLocation.column + deltaColumn
     }
 
     console.log('moved right');
