@@ -120,7 +120,7 @@ function Player(name, color, ogLocation, keys) {
 
     this.playerLocation = cLocation;
     this.name = name;
-    this.color = color;
+    this.playerColor = color;
     this.ogLocation = ogLocation;
     this.keys = keys;
     console.log('name' + name + ' player color: ' + color + ' ogLocation: ' + ogLocation + ' keys: ' + keys);
@@ -132,7 +132,7 @@ function Player(name, color, ogLocation, keys) {
         var x = wallStartX + this.playerLocation.column * wallSize + wallSize/2;
         var y = wallStartY + this.playerLocation.row * wallSize + wallSize/2;  
 
-        drawCircle(x, y, wallSize/3, playerColor, wallSize/12, playerBorder); //draw the player.
+        drawCircle(x, y, wallSize/3, this.playerColor, wallSize/12, playerBorder); //draw the player.
         deltaRow = 0;
         deltaColumn = 0;
     };
