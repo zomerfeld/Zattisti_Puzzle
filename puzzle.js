@@ -12,15 +12,15 @@
 //
 //         --------------
 var maze    = 'AC       # #'
-+ ' # ### # #  '
-+ ' ### # #### '
-+ ' #     #    '
-+ '## ##### ## '
-+ '   #     #  '
-+ '## ## ##### '
-+ '       #    '
-+ ' #### ## ###'
-+ '    # #    B';
+            + ' # ### # #  '
+            + ' ### # #### '
+            + ' #     #    '
+            + '## ##### ## '
+            + '   #     #  '
+            + '## ## ##### '
+            + '       #    '
+            + ' #### ## ###'
+            + '    # #   P ';
             //         --------------
 
 
@@ -40,6 +40,7 @@ var wallStartX, wallStartY, wallSize; // unclear
 var endAngle;  //Rotation of hexagon
 var playerWonHooray;
 var mario,peach;
+var marioLocation,peachLocation,marioOGLocation,peachOGLocation;
 
 function setup() {
     renderer.backgroundColor = wallColor; //The background is the color of the wall
@@ -49,8 +50,8 @@ function setup() {
     playerWonHooray = false; //Definiton of win condition
     endAngle = -90;
 
-    mario = new Player('Mario', 0x0DFF00, 'A', [37,38,39,40]); // L R U D
-    peach = new Player('Peach', 0xff5256, 'B', [65,87,68,83]); // A W D S
+    mario = new Player('Mario', 0x0DFF00, marioOGLocation, [37,38,39,40]); // L R U D
+    peach = new Player('Peach', 0xff5256, peachOGLocation, [65,87,68,83]); // A W D S
 
 
 }
@@ -59,8 +60,10 @@ function update() {
     graphics.clear(); //clears the graphics
     drawPath();
     drawEnd();
-    mario.drawPlayer();
-    peach.drawPlayer();
+    //draws the players and stores their current location into variables
+    marioLocation = mario.drawPlayer(); 
+    peachLocation = peach.drawPlayer();
+    //checks for win condition 
     checkWin(); 
 }
 
@@ -69,7 +72,7 @@ function update() {
     switch (event.keyCode) {
         case 37: // Left Arrow
         mario.moveLeft();
-        console.log('left');
+        // console.log('left');
         break;
         case 38: // Up Arrow
         mario.moveUp();
@@ -118,7 +121,7 @@ function Player(name, color, ogLocation, keys) {
 
 
 
-    this.playerLocation = cLocation;
+    this.playerLocation = ogLocation;
     this.name = name;
     this.playerColor = color;
     this.ogLocation = ogLocation;
@@ -135,6 +138,11 @@ function Player(name, color, ogLocation, keys) {
         drawCircle(x, y, wallSize/3, this.playerColor, wallSize/12, playerBorder); //draw the player.
         deltaRow = 0;
         deltaColumn = 0;
+        
+        // console.log("row: " + this.playerLocation.row + "column: " + this.playerLocation.column); // prints the current location
+        return this.playerLocation; //returns the location to the variables
+
+
     };
 
     this.moveRight = function() {
@@ -253,12 +261,13 @@ function buildMaze() { //Runs once in setup
             if (ch == 'A') {
                 startLocation = {'row':r, 'column':c}; // Defines where ogLocation is. Writes down "this is start location"
                 console.log('startLocation: ' + startLocation);
+                marioOGLocation = {'row':r, 'column':c};
             } else if (ch == 'B') {
                 endLocation = {'row':r, 'column':c}; // Defines where game ends. Not going to be peach anymore.
             } else if (ch == 'C') {
                 cLocation = {'row':r, 'column':c}; // SOmething else
             } else if (ch == 'P') {
-                peachLocation = {'row':r, 'column':c}; // Peach Start
+                peachOGLocation = {'row':r, 'column':c}; // Peach Start
             }
         }
     }
@@ -286,10 +295,10 @@ function drawEnd() {
         return;
 
     //If player didn't win
-    var x = wallStartX + endLocation.column * wallSize + wallSize/2;
-    var y = wallStartY + endLocation.row * wallSize + wallSize/2;
-    endAngle -= 1;
-    drawPolygon(x, y, wallSize/3, 5, endAngle, endColor);
+    // var x = wallStartX + endLocation.column * wallSize + wallSize/2;
+    // var y = wallStartY + endLocation.row * wallSize + wallSize/2;
+    // endAngle -= 1;
+    // drawPolygon(x, y, wallSize/3, 5, endAngle, endColor);
 }
 
 function drawPlayerZ(color) {
@@ -310,10 +319,11 @@ return ((ch != ' ') && (ch != 'A') && (ch != 'B') && (ch != 'C') && (ch != 'P'))
 function checkWin() { //changes the conditions if the player won.
     if (playerWonHooray)
         return;
-    if ((playerLocation.row == endLocation.row) && (playerLocation.column == endLocation.column)) {
+    if ((marioLocation.column == peachLocation.column) && (marioLocation.row == peachLocation.row)) { //if they meet!
         playerWonHooray = true;
         playerBorder = playerColor;
         playerColor = endColor;
+        pathColor = 0xE6BE8A ; //Changes the path color on victory, just to test - remove after (color is Pale Gold)
     }
 }
 
