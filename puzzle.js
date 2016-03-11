@@ -12,15 +12,15 @@
 //
 //         --------------
 var maze    = 'AC       # #'
-            + ' # ### # #  '
-            + ' ### # #### '
-            + ' #     #    '
-            + '## ##### ## '
-            + '   #     #  '
-            + '## ## ##### '
-            + '       #    '
-            + ' #### ## ###'
-            + '    # #   P ';
++ ' # ### # #  '
++ ' ### # #### '
++ ' #     #    '
++ '## ##### ## '
++ '   #     #  '
++ '## ## ##### '
++ '       #    '
++ ' #### ## ###'
++ '    # #   P ';
             //         --------------
 
 
@@ -69,7 +69,7 @@ function update() {
 
   function onKeyDown(event) { //we know we're ignoring the arrays we crated for this. maybe later.
 
-    switch (event.keyCode) {
+  switch (event.keyCode) {
         case 37: // Left Arrow
         mario.moveLeft();
         // console.log('left');
@@ -96,24 +96,15 @@ function update() {
         peach.moveDown();
         break;
 
+        case 84: // T for Teleport -- Disable before production
+        peach.teleport();
+        break;
+
         // default:
-        //     console.log (event.keyCode);
+        // console.log (event.keyCode);
     }
 
-    // Look at the location we want to move to. if it's out of bounds or
-    // there's a wall, cancel the move.
-    // var nr = playerLocation.row + deltaRow;
-    // var nc = playerLocation.column + deltaColumn;
-    // if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-    //     deltaRow = 0;
-    //     deltaColumn = 0;
-    //     //Put a sound here? Consequences
-    // }
 
-    // playerLocation = {
-    //     'row': playerLocation.row + deltaRow,
-    //     'column': playerLocation.column + deltaColumn
-    // }
 }
 
 function Player(name, color, ogLocation, keys) {
@@ -241,6 +232,20 @@ this.moveDown = function() {
     // console.log(playerLocation);
 };
 
+this.teleport = function () {
+ this.playerLocation = {
+    'row': getRandomArbitrary(0,10),
+    'column': getRandomArbitrary(0,12)
+}
+console.log('row: ' + this.playerLocation.row + ' column: ' + this.playerLocation.column );
+
+
+}
+
+}
+
+function getRandomArbitrary(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
 }
 
 function buildMaze() { //Runs once in setup
@@ -300,6 +305,7 @@ function drawEnd() {
     // endAngle -= 1;
     // drawPolygon(x, y, wallSize/3, 5, endAngle, endColor);
 }
+
 
 
 
