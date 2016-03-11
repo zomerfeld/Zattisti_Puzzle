@@ -66,7 +66,7 @@ function update() {
 
     function onKeyDown(event) { //we know we're ignoring the arrays we crated for this. maybe later.
 
-        switch (event.keyCode) {
+    switch (event.keyCode) {
         case 37: // Left Arrow
         mario.moveLeft();
         console.log('left');
@@ -127,7 +127,7 @@ function Player(name, color, ogLocation, keys) {
 
 
 
-    this.drawPlayer = function() {
+    this.drawPlayer = function() { //Draws the player
         //centers the shape
         var x = wallStartX + playerLocation.column * wallSize + wallSize/2;
         var y = wallStartY + playerLocation.row * wallSize + wallSize/2;  
@@ -159,11 +159,11 @@ function Player(name, color, ogLocation, keys) {
 
     console.log('moved right');
     // console.log(playerLocation);
-}
+};
 
-    this.moveLeft = function() {
+this.moveLeft = function() {
 
-        this.deltaColumn = -1;
+    this.deltaColumn = -1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
@@ -174,7 +174,7 @@ function Player(name, color, ogLocation, keys) {
         deltaColumn = 0;
         //Put a sound here? Consequences
         console.log('***BLOCKED***');
-    }
+    };
 
     playerLocation = {
         'row': playerLocation.row + deltaRow,
@@ -183,11 +183,11 @@ function Player(name, color, ogLocation, keys) {
 
     console.log('moved left');
     // console.log(playerLocation);
-}
+};
 
-    this.moveUp = function() {
+this.moveUp = function() {
 
-        this.deltaRow = -1;
+    this.deltaRow = -1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
@@ -207,11 +207,11 @@ function Player(name, color, ogLocation, keys) {
 
     console.log('moved up');
     // console.log(playerLocation);
-}
+};
 
-    this.moveDown = function() {
+this.moveDown = function() {
 
-        this.deltaRow = +1;
+    this.deltaRow = +1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
@@ -231,7 +231,7 @@ function Player(name, color, ogLocation, keys) {
 
     console.log('moved down');
     // console.log(playerLocation);
-}
+};
 
 }
 
