@@ -34,6 +34,32 @@ var wallColor = 0xFF823A;
 var endColor = 0xF2F26F;
 var playerColor = 0xF04155;
 var playerBorder = 0xFFF7BD;
+var lastAction = 'M';
+var agencyCounter = 0;
+
+var hintText = new PIXI.Text('This is a pixi text',style);
+text.x = 30;
+text.y = 90;
+
+var stage = new PIXI.Container();
+stage.addChild(hintText);
+
+var style = {
+    font : 'bold italic 36px Arial',
+    fill : '#F7EDCA',
+    stroke : '#4a1850',
+    strokeThickness : 5,
+    dropShadow : true,
+    dropShadowColor : '#000000',
+    dropShadowAngle : Math.PI / 6,
+    dropShadowDistance : 6,
+    wordWrap : true,
+    wordWrapWidth : 440
+};
+
+
+
+
 
 var startLocation, endLocation;  //LOCATION
 var wallStartX, wallStartY, wallSize; // unclear
@@ -53,7 +79,6 @@ function setup() {
     mario = new Player('Mario', 0x0DFF00, marioOGLocation, [37,38,39,40]); // L R U D
     peach = new Player('Peach', 0xff5256, peachOGLocation, [65,87,68,83]); // A W D S
 
-
 }
 
 function update() {
@@ -65,6 +90,7 @@ function update() {
     peachLocation = peach.drawPlayer();
     //checks for win condition 
     checkWin(); 
+    renderer.render(stage);
 }
 
   function onKeyDown(event) { //we know we're ignoring the arrays we crated for this. maybe later.
@@ -72,32 +98,48 @@ function update() {
   switch (event.keyCode) {
         case 37: // Left Arrow
         mario.moveLeft();
+        lastAction = 'M';
         // console.log('left');
         break;
+
         case 38: // Up Arrow
         mario.moveUp();
+        lastAction = 'M';
         break;
+
         case 39: // Right Arrow
         mario.moveRight();
+        lastAction = 'M';
         break;
+
         case 40: // Down Arrow
         mario.moveDown();
+        lastAction = 'M';
         break;
+
         case 65: // Left
         peach.moveLeft();
+        lastAction = 'P';
         break;
+
         case 68: // Right
         peach.moveRight();
+        lastAction = 'P';
         break;
+
         case 87: // UP
         peach.moveUp();
+        lastAction = 'P';
         break;
+
         case 83: // Down 
         peach.moveDown();
+        lastAction = 'P';
         break;
 
         case 84: // T for Teleport -- Disable before production
         peach.teleport();
+        lastAction = 'P';
         break;
 
         // default:
@@ -233,11 +275,21 @@ this.moveDown = function() {
 };
 
 this.teleport = function () {
- this.playerLocation = {
-    'row': getRandomArbitrary(0,10),
-    'column': getRandomArbitrary(0,12)
-}
-console.log('row: ' + this.playerLocation.row + ' column: ' + this.playerLocation.column );
+    var nr = getRandomArbitrary(0,10);
+    var nc = getRandomArbitrary(0,12);
+    if (isWall(nr, nc)) {
+        this.teleport();
+    }
+    else {
+        this.playerLocation = {
+            'row': nr,
+            'column': nc
+        };
+
+    }
+
+
+    console.log('row: ' + this.playerLocation.row + ' column: ' + this.playerLocation.column );
 
 
 }
@@ -246,6 +298,10 @@ console.log('row: ' + this.playerLocation.row + ' column: ' + this.playerLocatio
 
 function getRandomArbitrary(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function displayHint() {
+
 }
 
 function buildMaze() { //Runs once in setup
@@ -316,13 +372,23 @@ return ((ch != ' ') && (ch != 'A') && (ch != 'B') && (ch != 'C') && (ch != 'P'))
 }
 
 function checkWin() { //changes the conditions if the player won.
-    if (playerWonHooray)
+    if (playerWonHooray) // if already won, skip the rest of the function
         return;
     if ((marioLocation.column == peachLocation.column) && (marioLocation.row == peachLocation.row)) { //if they meet!
-        playerWonHooray = true;
-        playerBorder = playerColor;
-        playerColor = endColor;
+        if (lastAction == 'M') {
+            peach.teleport();
+            agencyCounter += 1;
+            console.log('agencyCounter ' + agencyCounter);
+            if (agencyCounter >= 4) {
+                displayHint();
+            }
+        } else if (lastAction == 'P') {
+              // playerWonHooray = true;  
+              playerBorder = playerColor;
+              playerColor = endColor;
         pathColor = 0xE6BE8A ; //Changes the path color on victory, just to test - remove after (color is Pale Gold)
+
     }
+}
 }
 
