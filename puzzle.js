@@ -42,16 +42,10 @@ var playerBorder = 0xFFF7BD;
 var lastAction = 'M';
 var agencyCounter = 0;
 
-var hintText = new PIXI.Text('This is a pixi text',style);
-text.x = 30;
-text.y = 90;
-
-var stage = new PIXI.Container();
-
-
 var style = {
     font : 'bold italic 12px Arial',
     fill : '#ffffff',
+    alpha : 0.1,
     stroke : '#4a1850',
     strokeThickness : 5,
     dropShadow : true,
@@ -60,7 +54,16 @@ var style = {
     dropShadowDistance : 6,
     wordWrap : true,
     wordWrapWidth : 440
-};
+}
+
+var hintText = new PIXI.Text('This is a pixi text',style);
+
+text.x = 30;
+text.y = 90;
+
+var stage = new PIXI.Container();
+
+
 
 
 
