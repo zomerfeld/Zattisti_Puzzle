@@ -11,6 +11,11 @@
 // - a walkable empty space (' ').
 //
 //         --------------
+
+
+
+
+
 var maze    = 'AC       # #'
 + ' # ### # #  '
 + ' ### # #### '
@@ -42,11 +47,11 @@ text.x = 30;
 text.y = 90;
 
 var stage = new PIXI.Container();
-stage.addChild(hintText);
+
 
 var style = {
-    font : 'bold italic 36px Arial',
-    fill : '#F7EDCA',
+    font : 'bold italic 12px Arial',
+    fill : '#ffffff',
     stroke : '#4a1850',
     strokeThickness : 5,
     dropShadow : true,
@@ -90,7 +95,6 @@ function update() {
     peachLocation = peach.drawPlayer();
     //checks for win condition 
     checkWin(); 
-    renderer.render(stage);
 }
 
   function onKeyDown(event) { //we know we're ignoring the arrays we crated for this. maybe later.
@@ -301,7 +305,7 @@ function getRandomArbitrary(min, max) {
 }
 
 function displayHint() {
-
+        renderer.render(stage);
 }
 
 function buildMaze() { //Runs once in setup
@@ -380,6 +384,7 @@ function checkWin() { //changes the conditions if the player won.
             agencyCounter += 1;
             console.log('agencyCounter ' + agencyCounter);
             if (agencyCounter >= 4) {
+                stage.addChild(hintText);
                 displayHint();
             }
         } else if (lastAction == 'P') {
