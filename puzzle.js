@@ -40,26 +40,24 @@ var endColor = 0xF2F26F;
 var playerColor = 0xF04155;
 var playerBorder = 0xFFF7BD;
 var lastAction = 'M';
-var agencyCounter = 0;
+var agencyCounter = 3; // for testing purposes
 
 var style = {
-    font : 'bold italic 12px Arial',
+    font : 'bold 12px Comic Sans MS',
     fill : '#ffffff',
-    alpha : 0.1,
-    stroke : '#4a1850',
-    strokeThickness : 5,
-    dropShadow : true,
-    dropShadowColor : '#000000',
-    dropShadowAngle : Math.PI / 6,
-    dropShadowDistance : 6,
+    // alpha : 1,
+    // stroke : '#4a1850',
+    // strokeThickness : 5,
+    // dropShadow : true,
+    // dropShadowColor : '#000000',
+    // dropShadowAngle : Math.PI / 6,
+    // dropShadowDistance : 6,
     wordWrap : true,
     wordWrapWidth : 440
 }
 
-var hintText = new PIXI.Text('This is a pixi text',style);
+var hintText = new PIXI.Text('Is Mario the only one who can move?',style);
 
-text.x = 30;
-text.y = 90;
 
 var stage = new PIXI.Container();
 
@@ -78,6 +76,10 @@ var marioLocation,peachLocation,marioOGLocation,peachOGLocation;
 
 function setup() {
     renderer.backgroundColor = wallColor; //The background is the color of the wall
+    hintText.anchor.set(0.5, 0.5);
+    hintText.x = renderer.width/2;
+    hintText.y = renderer.height - 15;
+
     buildMaze(); // renders the maze
     playerLocation = {'row':startLocation.row, 'column':startLocation.column}; //takes the columns from startLocation and put them into the array  playerLocation 
     console.log('playerLocation ' + playerLocation);
