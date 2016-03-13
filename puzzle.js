@@ -40,10 +40,10 @@ var endColor = 0xF2F26F;
 var playerColor = 0xF04155;
 var playerBorder = 0xFFF7BD;
 var lastAction = 'M';
-var agencyCounter = 3; // for testing purposes
+var agencyCounter = 0; // for testing purposes
 
 var style = {
-    font : 'bold 12px Comic Sans MS',
+    font : '24px Comic Sans MS',
     fill : '#ffffff',
     // alpha : 1,
     // stroke : '#4a1850',
@@ -78,7 +78,7 @@ function setup() {
     renderer.backgroundColor = wallColor; //The background is the color of the wall
     hintText.anchor.set(0.5, 0.5);
     hintText.x = renderer.width/2;
-    hintText.y = renderer.height - 15;
+    hintText.y = renderer.height - 22;
 
     buildMaze(); // renders the maze
     playerLocation = {'row':startLocation.row, 'column':startLocation.column}; //takes the columns from startLocation and put them into the array  playerLocation 
@@ -286,7 +286,7 @@ this.moveDown = function() {
 this.teleport = function () {
     var nr = getRandomArbitrary(0,10);
     var nc = getRandomArbitrary(0,12);
-    if (isWall(nr, nc)) {
+    if (isWall(nr, nc) || (nr == mario.playerLocation.row && nc == mario.playerLocation.column) ) {
         this.teleport();
     }
     else {
@@ -391,6 +391,10 @@ function checkWin() { //changes the conditions if the player won.
             if (agencyCounter >= 4) {
                 stage.addChild(hintText);
                 displayHint();
+            }
+            if (agencyCounter >=8) {
+                hintText.setText('seriously Dude. WhAt iS up?');
+
             }
         } else if (lastAction == 'P') {
               // playerWonHooray = true;  
