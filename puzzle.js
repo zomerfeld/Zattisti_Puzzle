@@ -32,6 +32,21 @@ var maze    = 'AC       # #'
             var columns = 12;
             var rows = 10;
 
+var maze2    = 'AC       # #'
++ ' #  ##  ##  '
++ ' ### # #### '
++ ' #     #    '
++ '## # ### ## '
++ '   #     #  '
++ '## ## ####  '
++ '       #    '
++ ' # ## ## # #'
++ '    # #   P ';
+            //         --------------
+
+
+            var columns = 12;
+            var rows = 10;
 
 //COLORS 
 var pathColor = 0x95CFB7;
@@ -327,7 +342,13 @@ function buildMaze() { //Runs once in setup
     for (var r=0; r<rows; r++) {
         for (var c=0; c<columns; c++) {
             var i = (r * columns) + c;
-            var ch = maze[i];
+            
+   if (playerWonHooray && lastAction == 'P') {
+            	 var ch = maze2[i];
+            	 console.log('maze 2!' + maze2);
+            }
+           
+            else var ch = maze[i];
             if (ch == 'A') {
                 startLocation = {'row':r, 'column':c}; // Defines where ogLocation is. Writes down "this is start location"
                 console.log('startLocation: ' + startLocation);
@@ -347,7 +368,12 @@ function drawPath() {
     for (var r=0; r<rows; r++) { //for all the rows
         for (var c=0; c<columns; c++) { //and all columns - meaning every spot
             var i = (r * columns) + c;
-            var ch = maze[i];
+            if (playerWonHooray && lastAction == 'P') {
+            	 var ch = maze2[i];
+            	 console.log('maze 2!' + maze2);
+            }
+
+            else var ch = maze[i];
             // The start and end locations are also on the path,
             // so check for them too.
             if (ch==' ' || ch=='A' || ch=='B' || ch=='P' || ch=='C') { //if space, draw the path. 
@@ -398,8 +424,9 @@ function checkWin() { //changes the conditions if the player won.
             }
         } else if (lastAction == 'P') {
               // playerWonHooray = true;  
-              playerBorder = playerColor;
+              playerBorder = playerColor; // change the border to the player color
               playerColor = endColor;
+              drawPath();
         pathColor = 0xE6BE8A ; //Changes the path color on victory, just to test - remove after (color is Pale Gold)
 
     }
