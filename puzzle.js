@@ -442,6 +442,7 @@ function checkWin() {
             playerWonHooray = true;  
             cLocationOG = marioLocation; //puts the couple location where they touched.
             couple = new Player('Couple', 0xf8f8ff, cLocationOG, [37,38,39,40]); // L R U D
+            hintText.setText(" ");
 
         }   
     }
