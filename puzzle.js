@@ -41,7 +41,7 @@ var maze2   = 'AC   #   # #'
             + '## ## ####  '
             + '       #    '
             + ' # ## ## # #'
-            + '    # #   P ';
+            + '    #B#   P ';
             //         --------------
 
 
@@ -77,8 +77,10 @@ var hintText = new PIXI.Text('Is he the only one who can move?',style);
 var stage = new PIXI.Container();
 
 //Door
-var texture = PIXI.Texture.fromImage('http://pets-ssl.wuzy.net/pets/facebook/live/assets2/furniture/wall_object/38755_door_dragon_camelot_alena_c97ce1a62d5a23405fa985f2831a9641.png');
+var texture = PIXI.Texture.fromImage('http://i.imgur.com/bMPXj3k.png');
 var door = new PIXI.Sprite(texture);
+door.scale.x = 0.5;
+door.scale.y = 0.5;
 
 
 
