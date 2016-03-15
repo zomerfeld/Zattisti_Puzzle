@@ -172,7 +172,7 @@ function update() {
         break;
 
         case 83: // Down 
-        peach.moveDown
+        peach.moveDown();
         if (playerWonHooray == true) {couple.moveDown();}
         lastAction = 'P';
         break;
