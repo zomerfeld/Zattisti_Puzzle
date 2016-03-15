@@ -47,11 +47,14 @@ var maze2   = 'AC   #   # #'
 
 
 //COLORS 
-var pathColor = 0x95CFB7;
-var wallColor = 0xFF823A;
+var pathColor = 0xCBE0E0;
+var wallColor = 0x2C5460;
+var playerColor = 0xBBDC2F;
+var playerBorder = 0xCBE0E0;
+
 var endColor = 0xF2F26F;
-var playerColor = 0xF04155;
-var playerBorder = 0xFFF7BD;
+
+
 var lastAction = 'M';
 var agencyCounter = 0; // for testing purposes
 
@@ -98,8 +101,8 @@ function setup() {
     playerWonHooray = false; //Definiton of win condition
     endAngle = -90;
 
-    mario = new Player('Mario', 0x0DFF00, marioOGLocation, [37,38,39,40]); // L R U D
-    peach = new Player('Peach', 0xff5256, peachOGLocation, [65,87,68,83]); // A W D S
+    mario = new Player('Mario', 0x61B136, marioOGLocation, [37,38,39,40]); // L R U D
+    peach = new Player('Peach', 0xFF4A76, peachOGLocation, [65,87,68,83]); // A W D S
 
 }
 
@@ -194,7 +197,7 @@ function Player(name, color, ogLocation, keys) {
         var x = wallStartX + this.playerLocation.column * wallSize + wallSize/2;
         var y = wallStartY + this.playerLocation.row * wallSize + wallSize/2;  
 
-        drawCircle(x, y, wallSize/3, this.playerColor, wallSize/12, playerBorder); //draw the player.
+        drawCircle(x, y, wallSize/3, this.playerColor, wallSize/12, this.playerColor); //draw the player.
         deltaRow = 0;
         deltaColumn = 0;
         
@@ -423,8 +426,9 @@ function checkWin() {
             }
         } else if (lastAction == 'P') { //if Peach moved last
             // playerWonHooray = true;  
-            playerBorder = playerColor; // change the border to the player color
-            playerColor = 0xff8C00;
+            // playerBorder = playerColor; // change the border to the player color
+            // playerColor = 0xff8C00;
+
             pathColor = 0xE6BE8A ; //Changes the path color on victory, just to test - remove after (color is Pale Gold)
             changeMaze(maze2);
 
