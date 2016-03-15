@@ -76,6 +76,9 @@ var style = {
 var hintText = new PIXI.Text('Is he the only one who can move?',style);
 var stage = new PIXI.Container();
 
+//Door
+var texture = PIXI.Texture.fromImage('http://pets-ssl.wuzy.net/pets/facebook/live/assets2/furniture/wall_object/38755_door_dragon_camelot_alena_c97ce1a62d5a23405fa985f2831a9641.png');
+var door = new PIXI.Sprite(texture);
 
 
 
@@ -395,8 +398,17 @@ function drawPath() {
 
 function drawEnd() {
     //if playerwon
-    if (playerWonHooray)
+    if (playerWonHooray) {
+        door.anchor.x = 0.5;
+        door.anchor.y = 0.5;
+        door.position.x = wallStartX + endLocation.column * wallSize + wallSize/2; 
+        door.position.y = wallStartY + endLocation.row * wallSize + wallSize/2;
+        stage.addChild(door);
+
+
         return;
+    }
+
 
     //If player didn't win
     // var x = wallStartX + endLocation.column * wallSize + wallSize/2;
