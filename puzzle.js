@@ -17,36 +17,34 @@
 
 
 var maze    = 'AC       # #'
-+ ' # ### # #  '
-+ ' ### # #### '
-+ ' #     #    '
-+ '## ##### ## '
-+ '   #     #  '
-+ '## ## ##### '
-+ '       #    '
-+ ' #### ## ###'
-+ '    # #   P ';
+            + ' # ### # #  '
+            + ' ### # #### '
+            + ' #     #    '
+            + '## ##### ## '
+            + '   #     #  '
+            + '## ## ##### '
+            + '       #    '
+            + ' #### ## ###'
+            + '    # #   P ';
             //         --------------
 
 
             var columns = 12;
             var rows = 10;
 
-var maze2    = 'AC       # #'
-+ ' #  ##  ##  '
-+ ' ### # #### '
-+ ' #     #    '
-+ '## # ### ## '
-+ '   #     #  '
-+ '## ## ####  '
-+ '       #    '
-+ ' # ## ## # #'
-+ '    # #   P ';
+var maze2   = 'AC   #   # #'
+            + ' #  ##  ##  '
+            + ' ### # #### '
+            + '       #    '
+            + '## # ### ## '
+            + '   #     #  '
+            + '## ## ####  '
+            + '       #    '
+            + ' # ## ## # #'
+            + '    # #   P ';
             //         --------------
 
 
-            var columns = 12;
-            var rows = 10;
 
 //COLORS 
 var pathColor = 0x95CFB7;
@@ -58,7 +56,7 @@ var lastAction = 'M';
 var agencyCounter = 0; // for testing purposes
 
 var style = {
-    font : '24px Comic Sans MS',
+    font : '24px Avant Garde',
     fill : '#ffffff',
     // alpha : 1,
     // stroke : '#4a1850',
@@ -71,11 +69,9 @@ var style = {
     wordWrapWidth : 440
 }
 
+//Text Settings
 var hintText = new PIXI.Text('Is Mario the only one who can move?',style);
-
-
 var stage = new PIXI.Container();
-
 
 
 
@@ -89,7 +85,8 @@ var playerWonHooray;
 var mario,peach;
 var marioLocation,peachLocation,marioOGLocation,peachOGLocation;
 
-function setup() {
+//runs in the beginning.
+function setup() { 
     renderer.backgroundColor = wallColor; //The background is the color of the wall
     hintText.anchor.set(0.5, 0.5);
     hintText.x = renderer.width/2;
@@ -106,6 +103,8 @@ function setup() {
 
 }
 
+
+//runs continously 
 function update() {
     graphics.clear(); //clears the graphics
     drawPath();
@@ -117,7 +116,8 @@ function update() {
     checkWin(); 
 }
 
-  function onKeyDown(event) { //we know we're ignoring the arrays we crated for this. maybe later.
+//Key events 
+  function onKeyDown(event) { //ignores the array we created in the player function for now.
 
   switch (event.keyCode) {
         case 37: // Left Arrow
@@ -166,6 +166,12 @@ function update() {
         lastAction = 'P';
         break;
 
+
+        case 88: // T for Teleport -- Disable before production
+        changeMaze(maze2);
+        // lastAction = 'P';
+        break;
+
         // default:
         // console.log (event.keyCode);
     }
@@ -175,16 +181,12 @@ function update() {
 
 function Player(name, color, ogLocation, keys) {
 
-
-
-
     this.playerLocation = ogLocation;
     this.name = name;
     this.playerColor = color;
     this.ogLocation = ogLocation;
     this.keys = keys;
     console.log('name' + name + ' player color: ' + color + ' ogLocation: ' + ogLocation + ' keys: ' + keys);
-
 
 
     this.drawPlayer = function() { //Draws the player
@@ -203,7 +205,6 @@ function Player(name, color, ogLocation, keys) {
     };
 
     this.moveRight = function() {
-
         deltaColumn = +1;
 
     // Look at the location we want to move to. if it's out of bounds or
@@ -222,7 +223,7 @@ function Player(name, color, ogLocation, keys) {
         'column': this.playerLocation.column + deltaColumn
     }
 
-    console.log('moved right');
+    // console.log('moved right');
     // console.log(playerLocation);
 };
 
@@ -246,7 +247,7 @@ this.moveLeft = function() {
         'column': this.playerLocation.column + deltaColumn
     }
 
-    console.log('moved left');
+    // console.log('moved left');
     // console.log(playerLocation);
 };
 
@@ -270,7 +271,7 @@ this.moveUp = function() {
         'column': this.playerLocation.column + deltaColumn
     }
 
-    console.log('moved up');
+    // console.log('moved up');
     // console.log(playerLocation);
 };
 
@@ -294,36 +295,37 @@ this.moveDown = function() {
         'column': this.playerLocation.column + deltaColumn
     }
 
-    console.log('moved down');
+    // console.log('moved down');
     // console.log(playerLocation);
 };
 
-this.teleport = function () {
-    var nr = getRandomArbitrary(0,10);
-    var nc = getRandomArbitrary(0,12);
-    if (isWall(nr, nc) || (nr == mario.playerLocation.row && nc == mario.playerLocation.column) ) {
-        this.teleport();
-    }
-    else {
-        this.playerLocation = {
-            'row': nr,
-            'column': nc
-        };
+    this.teleport = function () {
+        var nr = getRandomArbitrary(0,10);
+        var nc = getRandomArbitrary(0,12);
+        if (isWall(nr, nc) || (nr == mario.playerLocation.row && nc == mario.playerLocation.column) ) {
+            this.teleport();
+        }
+        else {
+            this.playerLocation = {
+                'row': nr,
+                'column': nc
+            };
+
+        }
+
+        console.log('row: ' + this.playerLocation.row + ' column: ' + this.playerLocation.column );
+
 
     }
 
-
-    console.log('row: ' + this.playerLocation.row + ' column: ' + this.playerLocation.column );
-
-
 }
 
-}
-
+//randomized a number between the min and max 
 function getRandomArbitrary(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
 }
 
+//shows the hing
 function displayHint() {
         renderer.render(stage);
 }
@@ -342,13 +344,7 @@ function buildMaze() { //Runs once in setup
     for (var r=0; r<rows; r++) {
         for (var c=0; c<columns; c++) {
             var i = (r * columns) + c;
-            
-   if (playerWonHooray && lastAction == 'P') {
-            	 var ch = maze2[i];
-            	 console.log('maze 2!' + maze2);
-            }
-           
-            else var ch = maze[i];
+            var ch = maze[i];
             if (ch == 'A') {
                 startLocation = {'row':r, 'column':c}; // Defines where ogLocation is. Writes down "this is start location"
                 console.log('startLocation: ' + startLocation);
@@ -399,18 +395,21 @@ function drawEnd() {
 
 
 
+//this funciton checks if there's a wall in a specific location.
+//used in the moving action for the player and blocks it. 
 
-function isWall(r, c) { //this funciton checks if there's a wall, used in the moving action for the player and blocks it. 
+function isWall(r, c) { 
 var i = (r * columns) + c;
 var ch = maze[i];
 return ((ch != ' ') && (ch != 'A') && (ch != 'B') && (ch != 'C') && (ch != 'P'));
 }
 
-function checkWin() { //changes the conditions if the player won.
+//changes the conditions if the player won.
+function checkWin() { 
     if (playerWonHooray) // if already won, skip the rest of the function
         return;
     if ((marioLocation.column == peachLocation.column) && (marioLocation.row == peachLocation.row)) { //if they meet!
-        if (lastAction == 'M') {
+        if (lastAction == 'M') { //If Mario moved last. 
             peach.teleport();
             agencyCounter += 1;
             console.log('agencyCounter ' + agencyCounter);
@@ -419,17 +418,24 @@ function checkWin() { //changes the conditions if the player won.
                 displayHint();
             }
             if (agencyCounter >=8) {
-                hintText.setText('seriously Dude. WhAt iS up?');
+                hintText.setText('seriously Dude. WhAt iS up?'); //Changes the text on the screen. 
 
             }
-        } else if (lastAction == 'P') {
-              // playerWonHooray = true;  
-              playerBorder = playerColor; // change the border to the player color
-              playerColor = endColor;
-              drawPath();
-        pathColor = 0xE6BE8A ; //Changes the path color on victory, just to test - remove after (color is Pale Gold)
+        } else if (lastAction == 'P') { //if Peach moved last
+            // playerWonHooray = true;  
+            playerBorder = playerColor; // change the border to the player color
+            playerColor = 0xff8C00;
+            pathColor = 0xE6BE8A ; //Changes the path color on victory, just to test - remove after (color is Pale Gold)
+            changeMaze(maze2);
 
+        }   
     }
 }
+
+//changes the maze to the another maze
+//takes the new maze variable as input
+var changeMaze = function(newMaze) {
+    maze = newMaze; //changes the maze variable to hold another maze
+    buildMaze(); //rebuilds the maze
 }
 
