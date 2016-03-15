@@ -73,7 +73,7 @@ var style = {
 }
 
 //Text Settings
-var hintText = new PIXI.Text('Is Mario the only one who can move?',style);
+var hintText = new PIXI.Text('Is he the only one who can move?',style);
 var stage = new PIXI.Container();
 
 
