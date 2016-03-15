@@ -86,7 +86,7 @@ var wallStartX, wallStartY, wallSize; // unclear
 var endAngle;  //Rotation of hexagon
 var playerWonHooray;
 var mario,peach;
-var marioLocation,peachLocation,marioOGLocation,peachOGLocation;
+var marioLocation,peachLocation,marioOGLocation,peachOGLocation,cLocation,cLocationOG;
 
 //runs in the beginning.
 function setup() { 
@@ -104,6 +104,7 @@ function setup() {
     mario = new Player('Mario', 0x61B136, marioOGLocation, [37,38,39,40]); // L R U D
     peach = new Player('Peach', 0xFF4A76, peachOGLocation, [65,87,68,83]); // A W D S
 
+
 }
 
 
@@ -113,8 +114,12 @@ function update() {
     drawPath();
     drawEnd();
     //draws the players and stores their current location into variables
-    marioLocation = mario.drawPlayer(); 
-    peachLocation = peach.drawPlayer();
+    if (playerWonHooray == false) {
+        marioLocation = mario.drawPlayer(); 
+        peachLocation = peach.drawPlayer();
+    } else {
+        cLocation = couple.drawPlayer();
+    }
     //checks for win condition 
     checkWin(); 
 }
@@ -125,42 +130,50 @@ function update() {
   switch (event.keyCode) {
         case 37: // Left Arrow
         mario.moveLeft();
+        if (playerWonHooray == true) {couple.moveLeft();}
         lastAction = 'M';
         // console.log('left');
         break;
 
         case 38: // Up Arrow
         mario.moveUp();
+        if (playerWonHooray == true) {couple.moveUp();}
         lastAction = 'M';
         break;
 
         case 39: // Right Arrow
         mario.moveRight();
+        if (playerWonHooray == true) {couple.moveRight();}
         lastAction = 'M';
         break;
 
         case 40: // Down Arrow
         mario.moveDown();
+        if (playerWonHooray == true) {couple.moveDown();}
         lastAction = 'M';
         break;
 
         case 65: // Left
         peach.moveLeft();
+        if (playerWonHooray == true) {couple.moveLeft();}
         lastAction = 'P';
         break;
 
         case 68: // Right
         peach.moveRight();
+        if (playerWonHooray == true) {couple.moveRight();}
         lastAction = 'P';
         break;
 
         case 87: // UP
         peach.moveUp();
+        if (playerWonHooray == true) {couple.moveUp();}
         lastAction = 'P';
         break;
 
         case 83: // Down 
-        peach.moveDown();
+        peach.moveDown
+        if (playerWonHooray == true) {couple.moveDown();}
         lastAction = 'P';
         break;
 
@@ -354,7 +367,7 @@ function buildMaze() { //Runs once in setup
             } else if (ch == 'B') {
                 endLocation = {'row':r, 'column':c}; // Defines where game ends. Not going to be peach anymore.
             } else if (ch == 'C') {
-                cLocation = {'row':r, 'column':c}; // SOmething else
+                // cLocationOG = {'row':r, 'column':c}; // SOmething else
             } else if (ch == 'P') {
                 peachOGLocation = {'row':r, 'column':c}; // Peach Start
             }
@@ -366,12 +379,9 @@ function drawPath() {
     for (var r=0; r<rows; r++) { //for all the rows
         for (var c=0; c<columns; c++) { //and all columns - meaning every spot
             var i = (r * columns) + c;
-            if (playerWonHooray && lastAction == 'P') {
-            	 var ch = maze2[i];
-            	 console.log('maze 2!' + maze2);
-            }
 
-            else var ch = maze[i];
+
+            var ch = maze[i];
             // The start and end locations are also on the path,
             // so check for them too.
             if (ch==' ' || ch=='A' || ch=='B' || ch=='P' || ch=='C') { //if space, draw the path. 
@@ -424,12 +434,14 @@ function checkWin() {
 
             }
         } else if (lastAction == 'P') { //if Peach moved last
-            // playerWonHooray = true;  
             // playerBorder = playerColor; // change the border to the player color
             // playerColor = 0xff8C00;
 
             pathColor = 0xE6BE8A ; //Changes the path color on victory, just to test - remove after (color is Pale Gold)
             changeMaze(maze2);
+            playerWonHooray = true;  
+            cLocationOG = marioLocation; //puts the couple location where they touched.
+            couple = new Player('Couple', 0xf8f8ff, cLocationOG, [37,38,39,40]); // L R U D
 
         }   
     }
@@ -440,5 +452,8 @@ function checkWin() {
 var changeMaze = function(newMaze) {
     maze = newMaze; //changes the maze variable to hold another maze
     buildMaze(); //rebuilds the maze
+
+
+
 }
 
