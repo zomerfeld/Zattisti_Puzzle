@@ -170,10 +170,9 @@ function update() {
         break;
 
 
-        case 88: // T for Teleport -- Disable before production
-        changeMaze(maze2);
-        // lastAction = 'P';
-        break;
+        // case 77: // M for Change Maze
+        // changeMaze(maze2);
+        // break;
 
         // default:
         // console.log (event.keyCode);
