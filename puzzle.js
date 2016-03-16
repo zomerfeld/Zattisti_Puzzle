@@ -17,22 +17,22 @@
 
 
 var maze    = 'AC       # #'
-            + ' # ### # #  '
-            + ' ### # #### '
-            + ' #     #    '
-            + '## ##### ## '
-            + '   #     #  '
-            + '## ## ##### '
-            + '       #    '
-            + ' #### ## ###'
-            + '    # #   P ';
++ ' # ### # #  '
++ ' ### # #### '
++ ' #     #    '
++ '## ##### ## '
++ '   #     #  '
++ '## ## ##### '
++ '       #    '
++ ' #### ## ###'
++ '    # #   P ';
             //         --------------
 
 
             var columns = 12;
             var rows = 10;
 
-var maze2   = 'AC   #   # #'
+            var maze2   = 'AC   #   # #'
             + ' #  ##  ##  '
             + ' ### # #### '
             + '       #    '
@@ -59,10 +59,11 @@ var endColor = 0xF2F26F;
 
 var lastAction = 'M';
 var agencyCounter = 0; // for testing purposes
+var blockedCounter = 0; // counts hits on a wall by couple character in maze 2
 
 var style = {
-    font : '24px Avant Garde',
-    fill : '#ffffff',
+	font : '24px Avant Garde',
+	fill : '#ffffff',
     // alpha : 1,
     // stroke : '#4a1850',
     // strokeThickness : 5,
@@ -122,19 +123,21 @@ function update() {
     drawEnd();
     //draws the players and stores their current location into variables
     if (playerWonHooray == false) {
-        marioLocation = mario.drawPlayer(); 
-        peachLocation = peach.drawPlayer();
+    	marioLocation = mario.drawPlayer(); 
+    	peachLocation = peach.drawPlayer();
     } else {
-        cLocation = couple.drawPlayer();
+    	cLocation = couple.drawPlayer();
     }
     //checks for win condition 
     checkWin(); 
-}
+
+     // console.log('***BLOCKED*** ' + blockedCounter);
+ }
 
 //Key events 
   function onKeyDown(event) { //ignores the array we created in the player function for now.
 
-  switch (event.keyCode) {
+  	switch (event.keyCode) {
         case 37: // Left Arrow
         mario.moveLeft();
         if (playerWonHooray == true) {couple.moveLeft();}
@@ -203,12 +206,12 @@ function update() {
 
 function Player(name, color, ogLocation, keys) {
 
-    this.playerLocation = ogLocation;
-    this.name = name;
-    this.playerColor = color;
-    this.ogLocation = ogLocation;
-    this.keys = keys;
-    console.log('name' + name + ' player color: ' + color + ' ogLocation: ' + ogLocation + ' keys: ' + keys);
+	this.playerLocation = ogLocation;
+	this.name = name;
+	this.playerColor = color;
+	this.ogLocation = ogLocation;
+	this.keys = keys;
+	console.log('name' + name + ' player color: ' + color + ' ogLocation: ' + ogLocation + ' keys: ' + keys);
 
 
     this.drawPlayer = function() { //Draws the player
@@ -227,130 +230,183 @@ function Player(name, color, ogLocation, keys) {
     };
 
     this.moveRight = function() {
-        deltaColumn = +1;
+    	deltaColumn = +1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
     var nr = this.playerLocation.row + deltaRow;
     var nc = this.playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-        deltaRow = 0;
-        deltaColumn = 0;
+    	deltaRow = 0;
+    	deltaColumn = 0;
+    	blockedCounter += 1;
         //Put a sound here? Consequences
-        console.log('***BLOCKED***');
+    // console.log('***BLOCKED***');
+    if (blockedCounter > 6 && playerWonHooray == true) {
+		// console.log('y new ' + nr);
+		// console.log('x new ' + nc);
+		var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
+		// console.log('wall to replace ' + formulaWallReplace);
+		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
+		buildMaze(); // rebuilds maze once wall is broken
+	}
+
+} else {
+    	blockedCounter = 0; // resets blockedCounter if player moves sucessfully
     }
 
     this.playerLocation = {
-        'row': this.playerLocation.row + deltaRow,
-        'column': this.playerLocation.column + deltaColumn
+    	'row': this.playerLocation.row + deltaRow,
+    	'column': this.playerLocation.column + deltaColumn
     }
-
+    
     // console.log('moved right');
     // console.log(playerLocation);
 };
 
+
 this.moveLeft = function() {
 
-    deltaColumn = -1;
+	deltaColumn = -1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
     var nr = this.playerLocation.row + deltaRow;
     var nc = this.playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-        deltaRow = 0;
-        deltaColumn = 0;
+    	deltaRow = 0;
+    	deltaColumn = 0;
+    	blockedCounter += 1;
         //Put a sound here? Consequences
-        console.log('***BLOCKED***');
+    // console.log('***BLOCKED***');
+    if (blockedCounter > 6 && playerWonHooray == true) {
+		// console.log('y new ' + nr);
+		// console.log('x new ' + nc);
+		var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
+		// console.log('wall to replace ' + formulaWallReplace);
+		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
+		buildMaze(); // rebuilds maze once wall is broken
+	}
+
+} else {
+    	blockedCounter = 0; // resets blockedCounter if player moves sucessfully
     }
 
     this.playerLocation = {
-        'row': this.playerLocation.row + deltaRow,
-        'column': this.playerLocation.column + deltaColumn
+    	'row': this.playerLocation.row + deltaRow,
+    	'column': this.playerLocation.column + deltaColumn
     }
-
-    // console.log('moved left');
+    
+    // console.log('moved right');
     // console.log(playerLocation);
 };
+
 
 this.moveUp = function() {
 
-    deltaRow = -1;
+	deltaRow = -1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
     var nr = this.playerLocation.row + deltaRow;
     var nc = this.playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-        deltaRow = 0;
-        deltaColumn = 0;
+    	deltaRow = 0;
+    	deltaColumn = 0;
+    	blockedCounter += 1;
         //Put a sound here? Consequences
-        console.log('***BLOCKED***');
+      // console.log('***BLOCKED***');
+      if (blockedCounter > 6 && playerWonHooray == true) {
+		// console.log('y new ' + nr);
+		// console.log('x new ' + nc);
+		var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
+		// console.log('wall to replace ' + formulaWallReplace);
+		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
+		buildMaze(); // rebuilds maze once wall is broken
+	}
+
+} else {
+    	blockedCounter = 0; // resets blockedCounter if player moves sucessfully
     }
 
     this.playerLocation = {
-        'row': this.playerLocation.row + deltaRow,
-        'column': this.playerLocation.column + deltaColumn
+    	'row': this.playerLocation.row + deltaRow,
+    	'column': this.playerLocation.column + deltaColumn
     }
-
-    // console.log('moved up');
+    
+    // console.log('moved right');
     // console.log(playerLocation);
 };
+
 
 this.moveDown = function() {
 
-    deltaRow = +1;
+	deltaRow = +1;
 
     // Look at the location we want to move to. if it's out of bounds or
     // there's a wall, cancel the move.
     var nr = this.playerLocation.row + deltaRow;
     var nc = this.playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-        deltaRow = 0;
-        deltaColumn = 0;
-        //Put a sound here? Consequences
-        console.log('***BLOCKED***');
+    	deltaRow = 0;
+    	deltaColumn = 0;
+    	blockedCounter += 1;
+      //Put a sound here? Consequences
+        // console.log('***BLOCKED***');
+        if (blockedCounter > 6 && playerWonHooray == true) {
+		// console.log('y new ' + nr);
+		// console.log('x new ' + nc);
+		var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
+		// console.log('wall to replace ' + formulaWallReplace);
+		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
+		buildMaze(); // rebuilds maze once wall is broken
+	}
+
+} else {
+    	blockedCounter = 0; // resets blockedCounter if player moves sucessfully
     }
 
     this.playerLocation = {
-        'row': this.playerLocation.row + deltaRow,
-        'column': this.playerLocation.column + deltaColumn
+    	'row': this.playerLocation.row + deltaRow,
+    	'column': this.playerLocation.column + deltaColumn
     }
-
-    // console.log('moved down');
+    
+    // console.log('moved right');
     // console.log(playerLocation);
 };
 
-    this.teleport = function () {
-        var nr = getRandomArbitrary(0,10);
-        var nc = getRandomArbitrary(0,12);
-        if (isWall(nr, nc) || (nr == mario.playerLocation.row && nc == mario.playerLocation.column) ) {
-            this.teleport();
-        }
-        else {
-            this.playerLocation = {
-                'row': nr,
-                'column': nc
-            };
+this.teleport = function () {
+	var nr = getRandomArbitrary(0,10);
+	var nc = getRandomArbitrary(0,12);
+	if (isWall(nr, nc) || (nr == mario.playerLocation.row && nc == mario.playerLocation.column) ) {
+		this.teleport();
+	}
+	else {
+		this.playerLocation = {
+			'row': nr,
+			'column': nc
+		};
 
-        }
+	}
 
-        console.log('row: ' + this.playerLocation.row + ' column: ' + this.playerLocation.column );
+	console.log('row: ' + this.playerLocation.row + ' column: ' + this.playerLocation.column );
 
 
-    }
+}
 
 }
 
 //randomized a number between the min and max 
 function getRandomArbitrary(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
+	return Math.floor(Math.random() * (max - min)) + min;
 }
 
 //shows the hing
 function displayHint() {
-        renderer.render(stage);
+	renderer.render(stage);
 }
+
+
 
 function buildMaze() { //Runs once in setup
 
@@ -364,17 +420,19 @@ function buildMaze() { //Runs once in setup
 
     // Find the start and end locations.
     for (var r=0; r<rows; r++) {
-        for (var c=0; c<columns; c++) {
-            var i = (r * columns) + c;
-            var ch = maze[i];
-            if (ch == 'A') {
+    	for (var c=0; c<columns; c++) {
+    		var i = (r * columns) + c;
+    		// console.log('location ' + i);
+
+    		var ch = maze[i];
+    		if (ch == 'A') {
                 startLocation = {'row':r, 'column':c}; // Defines where ogLocation is. Writes down "this is start location"
-                console.log('startLocation: ' + startLocation);
+                // console.log('startLocation: ' + startLocation);
                 marioOGLocation = {'row':r, 'column':c};
             } else if (ch == 'B') { //the door
                 endLocation = {'row':r, 'column':c}; // Defines where game ends. Not going to be peach anymore.
             } else if (ch == 'C') {
-                // cLocationOG = {'row':r, 'column':c}; // SOmething else
+                // cLocationOG = {'row':r, 'column':c}; // Something else
             } else if (ch == 'P') {
                 peachOGLocation = {'row':r, 'column':c}; // Peach Start
             }
@@ -385,16 +443,16 @@ function buildMaze() { //Runs once in setup
 function drawPath() {
     for (var r=0; r<rows; r++) { //for all the rows
         for (var c=0; c<columns; c++) { //and all columns - meaning every spot
-            var i = (r * columns) + c;
+        	var i = (r * columns) + c;
 
 
-            var ch = maze[i];
+        	var ch = maze[i];
             // The start and end locations are also on the path,
             // so check for them too.
             if (ch==' ' || ch=='A' || ch=='B' || ch=='P' || ch=='C') { //if space, draw the path. 
-                var x = wallStartX + c * wallSize;
-                var y = wallStartY + r * wallSize;
-                drawRect(x, y, wallSize, wallSize, pathColor);
+            	var x = wallStartX + c * wallSize;
+            	var y = wallStartY + r * wallSize;
+            	drawRect(x, y, wallSize, wallSize, pathColor);
             }
         }
     }
@@ -403,14 +461,14 @@ function drawPath() {
 function drawEnd() {
     //if playerwon
     if (playerWonHooray) { //display door
-        door.anchor.x = 0.5;
-        door.anchor.y = 0.5;
-        door.position.x = wallStartX + endLocation.column * wallSize + wallSize/2; 
-        door.position.y = wallStartY + endLocation.row * wallSize + wallSize/2;
-        stage.addChild(door);
+    	door.anchor.x = 0.5;
+    	door.anchor.y = 0.5;
+    	door.position.x = wallStartX + endLocation.column * wallSize + wallSize/2; 
+    	door.position.y = wallStartY + endLocation.row * wallSize + wallSize/2;
+    	stage.addChild(door);
 
 
-        return;
+    	return;
     }
 
 
@@ -427,25 +485,25 @@ function drawEnd() {
 //used in the moving action for the player and blocks it. 
 
 function isWall(r, c) { 
-var i = (r * columns) + c;
-var ch = maze[i];
-return ((ch != ' ') && (ch != 'A') && (ch != 'B') && (ch != 'C') && (ch != 'P'));
+	var i = (r * columns) + c;
+	var ch = maze[i];
+	return ((ch != ' ') && (ch != 'A') && (ch != 'B') && (ch != 'C') && (ch != 'P'));
 }
 
 //changes the conditions if the player won.
 function checkWin() { 
     if (playerWonHooray) // if already won, skip the rest of the function
-        return;
+    	return;
     if ((marioLocation.column == peachLocation.column) && (marioLocation.row == peachLocation.row)) { //if they meet!
         if (lastAction == 'M') { //If Mario moved last. 
-            peach.teleport();
-            agencyCounter += 1;
-            console.log('agencyCounter ' + agencyCounter);
-            if (agencyCounter >= 4) {
-                stage.addChild(hintText);
-                displayHint();
-            }
-            if (agencyCounter >=8) {
+        	peach.teleport();
+        	agencyCounter += 1;
+        	console.log('agencyCounter ' + agencyCounter);
+        	if (agencyCounter >= 4) {
+        		stage.addChild(hintText);
+        		displayHint();
+        	}
+        	if (agencyCounter >=8) {
                 hintText.setText('seriously Dude. WhAt iS up?'); //Changes the text on the screen. 
 
             }
@@ -472,5 +530,9 @@ var changeMaze = function(newMaze) {
 
 
 
+}
+
+String.prototype.replaceAt=function(index, character) {
+	return this.substr(0, index) + character + this.substr(index+character.length);
 }
 
