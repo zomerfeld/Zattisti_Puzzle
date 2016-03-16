@@ -33,15 +33,15 @@ var maze    = 'AC       # #'
             var rows = 10;
 
             var maze2   = 'AC   #   # #'
-            + ' #  ##  ##  '
+            + ' ## ##  ##  '
             + ' ### # #### '
-            + '       #    '
+            + '# ##  ##  # '
             + '## # ### ## '
-            + '   #     #  '
+            + '   #  #  #  '
             + '## ## ####  '
-            + '       #    '
-            + ' # ## ## # #'
-            + '    #B#   P ';
+            + ' #  #  #  # '
+            + ' # ##### # #'
+            + '# ###B#   P ';
             //         --------------
 
             //B is the door
@@ -139,57 +139,57 @@ function update() {
 
   	switch (event.keyCode) {
         case 37: // Left Arrow
-        mario.moveLeft();
+        if (playerWonHooray == false) {mario.moveLeft();}
         if (playerWonHooray == true) {couple.moveLeft();}
         lastAction = 'M';
         // console.log('left');
         break;
 
         case 38: // Up Arrow
-        mario.moveUp();
+        if (playerWonHooray == false) {mario.moveUp();}
         if (playerWonHooray == true) {couple.moveUp();}
         lastAction = 'M';   
         break;
 
         case 39: // Right Arrow
-        mario.moveRight();
+        if (playerWonHooray == false) {mario.moveRight();}
         if (playerWonHooray == true) {couple.moveRight();}
         lastAction = 'M';
         break;
 
         case 40: // Down Arrow
-        mario.moveDown();
+        if (playerWonHooray == false) {mario.moveDown();}
         if (playerWonHooray == true) {couple.moveDown();}
         lastAction = 'M';
         break;
 
         case 65: // Left
-        peach.moveLeft();
+        if (playerWonHooray == false) {peach.moveLeft();}
         if (playerWonHooray == true) {couple.moveLeft();}
         lastAction = 'P';
         break;
 
         case 68: // Right
-        peach.moveRight();
+        if (playerWonHooray == false) {peach.moveRight();}
         if (playerWonHooray == true) {couple.moveRight();}
         lastAction = 'P';
         break;
 
         case 87: // UP
-        peach.moveUp();
+        if (playerWonHooray == false) {peach.moveUp();}
         if (playerWonHooray == true) {couple.moveUp();}
         lastAction = 'P';
         break;
 
         case 83: // Down 
-        peach.moveDown();
+        if (playerWonHooray == false) {peach.moveDown();}
         if (playerWonHooray == true) {couple.moveDown();}
         lastAction = 'P';
         break;
 
         case 84: // T for Teleport -- Disable before production
-        peach.teleport();
-        lastAction = 'P';
+        // peach.teleport();
+        // lastAction = 'P';
         break;
 
 
@@ -242,7 +242,7 @@ function Player(name, color, ogLocation, keys) {
     	blockedCounter += 1;
         //Put a sound here? Consequences
     // console.log('***BLOCKED***');
-    if (blockedCounter > 6 && playerWonHooray == true) {
+    if (blockedCounter > 1 && playerWonHooray == true) {
 		// console.log('y new ' + nr);
 		// console.log('x new ' + nc);
 		var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
@@ -259,7 +259,7 @@ function Player(name, color, ogLocation, keys) {
     	'row': this.playerLocation.row + deltaRow,
     	'column': this.playerLocation.column + deltaColumn
     }
-    
+
     // console.log('moved right');
     // console.log(playerLocation);
 };
@@ -296,7 +296,7 @@ this.moveLeft = function() {
     	'row': this.playerLocation.row + deltaRow,
     	'column': this.playerLocation.column + deltaColumn
     }
-    
+
     // console.log('moved right');
     // console.log(playerLocation);
 };
@@ -333,7 +333,7 @@ this.moveUp = function() {
     	'row': this.playerLocation.row + deltaRow,
     	'column': this.playerLocation.column + deltaColumn
     }
-    
+
     // console.log('moved right');
     // console.log(playerLocation);
 };
@@ -370,7 +370,7 @@ this.moveDown = function() {
     	'row': this.playerLocation.row + deltaRow,
     	'column': this.playerLocation.column + deltaColumn
     }
-    
+
     // console.log('moved right');
     // console.log(playerLocation);
 };
