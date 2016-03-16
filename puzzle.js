@@ -44,6 +44,8 @@ var maze2   = 'AC   #   # #'
             + '    #B#   P ';
             //         --------------
 
+            //B is the door
+
 
 
 //COLORS 
@@ -143,7 +145,7 @@ function update() {
         case 38: // Up Arrow
         mario.moveUp();
         if (playerWonHooray == true) {couple.moveUp();}
-        lastAction = 'M';
+        lastAction = 'M';   
         break;
 
         case 39: // Right Arrow
@@ -369,7 +371,7 @@ function buildMaze() { //Runs once in setup
                 startLocation = {'row':r, 'column':c}; // Defines where ogLocation is. Writes down "this is start location"
                 console.log('startLocation: ' + startLocation);
                 marioOGLocation = {'row':r, 'column':c};
-            } else if (ch == 'B') {
+            } else if (ch == 'B') { //the door
                 endLocation = {'row':r, 'column':c}; // Defines where game ends. Not going to be peach anymore.
             } else if (ch == 'C') {
                 // cLocationOG = {'row':r, 'column':c}; // SOmething else
@@ -400,7 +402,7 @@ function drawPath() {
 
 function drawEnd() {
     //if playerwon
-    if (playerWonHooray) {
+    if (playerWonHooray) { //display door
         door.anchor.x = 0.5;
         door.anchor.y = 0.5;
         door.position.x = wallStartX + endLocation.column * wallSize + wallSize/2; 
