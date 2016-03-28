@@ -12,9 +12,15 @@
 //
 //         --------------
 
+// an attempt to get sound to work
+// <script src="https://code.createjs.com/soundjs-0.6.2.min.js"></script></head>
+
+// <body onload="loadSound();">
+//   <button onclick="handleClick();" class="playSound">Play Sound</button>
+// </body>
 
 
-
+// var soundID = "Thunder";
 
 var maze    = 'AC       # #'
 + ' # ### # #  '
@@ -50,7 +56,7 @@ var maze    = 'AC       # #'
 
 //COLORS 
 var pathColor = 0xCBE0E0;
-var wallColor = 0x2C5460;
+var wallColor = 0xff5256;
 var playerColor = 0xBBDC2F;
 var playerBorder = 0xCBE0E0;
 
@@ -112,6 +118,9 @@ function setup() {
     mario = new Player('Mario', 0x61B136, marioOGLocation, [37,38,39,40]); // L R U D
     peach = new Player('Peach', 0xFF4A76, peachOGLocation, [65,87,68,83]); // A W D S
 
+// an attempt to get sound to work
+    // loadSound(); // loads the sound
+
 
 }
 
@@ -139,11 +148,13 @@ function update() {
 
   	switch (event.keyCode) {
         case 37: // Left Arrow
+        // playSound();
         if (playerWonHooray == false) {mario.moveLeft();}
         if (playerWonHooray == true) {couple.moveLeft();}
         lastAction = 'M';
         // console.log('left');
         break;
+
 
         case 38: // Up Arrow
         if (playerWonHooray == false) {mario.moveUp();}
@@ -219,11 +230,17 @@ function Player(name, color, ogLocation, keys) {
         var x = wallStartX + this.playerLocation.column * wallSize + wallSize/2;
         var y = wallStartY + this.playerLocation.row * wallSize + wallSize/2;  
 
+        if (this.name == 'Couple') {
+            drawCircle(x, y, wallSize/3 - 5, mario.playerColor, wallSize/12 - 5, this.playerColor); //draw the player.
+            drawCircle(x + 20, y, wallSize/3 - 5, peach.playerColor, wallSize/12 - 5, this.playerColor); //draw the player.
+        }
+        else {
         drawCircle(x, y, wallSize/3, this.playerColor, wallSize/12, this.playerColor); //draw the player.
+    }
         deltaRow = 0;
         deltaColumn = 0;
         
-        // console.log("row: " + this.playerLocation.row + "column: " + this.playerLocation.column); // prints the current location
+        console.log("row: " + this.playerLocation.row + "column: " + this.playerLocation.column); // prints the current location
         return this.playerLocation; //returns the location to the variables
 
 
@@ -401,11 +418,22 @@ function getRandomArbitrary(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
 
-//shows the hing
+//shows the hint
 function displayHint() {
 	renderer.render(stage);
 }
 
+// // an attempt to get sound to work
+// // loads sound file
+// function loadSound () {
+//   createjs.Sound.registerSound("assets/thunder.mp3", soundID);
+// }
+
+// // an attempt to get sound to work
+// // plays sound file
+// function playSound () {
+//   createjs.Sound.play(soundID);
+// }
 
 
 function buildMaze() { //Runs once in setup
@@ -479,6 +507,9 @@ function drawEnd() {
     // drawPolygon(x, y, wallSize/3, 5, endAngle, endColor);
 }
 
+function winPopup() {
+
+}
 
 
 //this funciton checks if there's a wall in a specific location.
@@ -520,6 +551,12 @@ function checkWin() {
 
         }   
     }
+    if ((playerWonHooray) && (this.playerLocation.row == 9) && (this.playerLocation.column == 5)) {
+       stage.addChild(hintText);
+        displayHint();
+        hintText.setText('Congrats you won!');
+        console.log('you won');
+            }
 }
 
 //changes the maze to the another maze
