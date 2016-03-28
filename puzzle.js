@@ -66,6 +66,8 @@ var endColor = 0xF2F26F;
 var soundtrack = new Audio("soundtrack.mp3");
 var break1 = new Audio("break-1.aif");
 var break2 = new Audio("break-2.aif");
+var coupleSound = new Audio("coupleSound.aif");
+var winSound = new Audio("win.m4a");
 
 // agency variables
 var lastAction = 'M';
@@ -557,7 +559,7 @@ function checkWin() {
             cLocationOG = marioLocation; //puts the couple location where they touched.
             couple = new Player('Couple', 0xf8f8ff, cLocationOG, [37,38,39,40]); // L R U D
             hintText.text = " ";
-
+            coupleSound.play();
         }   
     }
 }
@@ -568,7 +570,7 @@ function checkEndGame() {
    stage.addChild(hintText);
    displayHint();
    hintText.setText('Congrats you won!');
-        // console.log('you won');
+    winSound.play();
     }
 }
 
