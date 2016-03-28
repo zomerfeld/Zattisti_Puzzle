@@ -140,6 +140,9 @@ function update() {
     //checks for win condition 
     checkWin(); 
 
+    checkEndGame();
+
+
      // console.log('***BLOCKED*** ' + blockedCounter);
  }
 
@@ -551,7 +554,9 @@ function checkWin() {
 
         }   
     }
-    if ((playerWonHooray) && (this.playerLocation.row == 9) && (this.playerLocation.column == 5)) {
+}
+function checkEndGame() {
+ if ((playerWonHooray) && (couple.playerLocation.row == 9) && (couple.playerLocation.column == 5)) {
        stage.addChild(hintText);
         displayHint();
         hintText.setText('Congrats you won!');
