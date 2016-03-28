@@ -62,7 +62,12 @@ var playerBorder = 0xCBE0E0;
 
 var endColor = 0xF2F26F;
 
+//SOUNDS
+var soundtrack = new Audio("soundtrack.mp3");
+var break1 = new Audio("break-1.aif");
+var break2 = new Audio("break-2.aif");
 
+// agency variables
 var lastAction = 'M';
 var agencyCounter = 0; // for testing purposes
 var blockedCounter = 0; // counts hits on a wall by couple character in maze 2
@@ -241,6 +246,7 @@ function Player(name, color, ogLocation, keys) {
     }
     deltaRow = 0;
     deltaColumn = 0;
+    // soundtrack.play();
 
         // console.log("row: " + this.playerLocation.row + "column: " + this.playerLocation.column); // prints the current location
         return this.playerLocation; //returns the location to the variables
@@ -259,7 +265,7 @@ function Player(name, color, ogLocation, keys) {
     	deltaRow = 0;
     	deltaColumn = 0;
     	blockedCounter += 1;
-        //Put a sound here? Consequences
+        break1.play(); // plays blocked sound
     // console.log('***BLOCKED***');
     if (blockedCounter > 1 && playerWonHooray == true) {
 		// console.log('y new ' + nr);
@@ -268,6 +274,7 @@ function Player(name, color, ogLocation, keys) {
 		// console.log('wall to replace ' + formulaWallReplace);
 		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
 		buildMaze(); // rebuilds maze once wall is broken
+        break2.play(); // plays wall break sound
 	}
 
 } else {
@@ -296,7 +303,7 @@ this.moveLeft = function() {
     	deltaRow = 0;
     	deltaColumn = 0;
     	blockedCounter += 1;
-        //Put a sound here? Consequences
+        break1.play(); // plays blocked sound
     // console.log('***BLOCKED***');
     if (blockedCounter > 6 && playerWonHooray == true) {
 		// console.log('y new ' + nr);
@@ -305,6 +312,7 @@ this.moveLeft = function() {
 		// console.log('wall to replace ' + formulaWallReplace);
 		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
 		buildMaze(); // rebuilds maze once wall is broken
+        break2.play(); // plays wall break sound
 	}
 
 } else {
@@ -333,7 +341,7 @@ this.moveUp = function() {
     	deltaRow = 0;
     	deltaColumn = 0;
     	blockedCounter += 1;
-        //Put a sound here? Consequences
+        break1.play(); // plays blocked sound
       // console.log('***BLOCKED***');
       if (blockedCounter > 6 && playerWonHooray == true) {
 		// console.log('y new ' + nr);
@@ -342,6 +350,7 @@ this.moveUp = function() {
 		// console.log('wall to replace ' + formulaWallReplace);
 		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
 		buildMaze(); // rebuilds maze once wall is broken
+        break2.play(); // plays wall break sound
 	}
 
 } else {
@@ -370,7 +379,7 @@ this.moveDown = function() {
     	deltaRow = 0;
     	deltaColumn = 0;
     	blockedCounter += 1;
-      //Put a sound here? Consequences
+        break1.play(); // plays blocked sound
         // console.log('***BLOCKED***');
         if (blockedCounter > 6 && playerWonHooray == true) {
 		// console.log('y new ' + nr);
@@ -379,6 +388,7 @@ this.moveDown = function() {
 		// console.log('wall to replace ' + formulaWallReplace);
 		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
 		buildMaze(); // rebuilds maze once wall is broken
+        break2.play(); // plays wall break sound
 	}
 
 } else {
@@ -436,6 +446,7 @@ function displayHint() {
 // function playSound () {
 //   createjs.Sound.play(soundID);
 // }
+
 
 
 function buildMaze() { //Runs once in setup
@@ -553,10 +564,10 @@ function checkWin() {
 
 // Checks if you're at the door and you're the couple.
 function checkEndGame() {
-   if ((playerWonHooray) && (couple.playerLocation.row == 9) && (couple.playerLocation.column == 5)) {
-     stage.addChild(hintText);
-     displayHint();
-     hintText.setText('Congrats you won!');
+ if ((playerWonHooray) && (couple.playerLocation.row == 9) && (couple.playerLocation.column == 5)) {
+   stage.addChild(hintText);
+   displayHint();
+   hintText.setText('Congrats you won!');
         // console.log('you won');
     }
 }
