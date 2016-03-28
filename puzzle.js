@@ -139,9 +139,8 @@ function update() {
     }
     //checks for win condition 
     checkWin(); 
-
+    // checks if you won the game
     checkEndGame();
-
 
      // console.log('***BLOCKED*** ' + blockedCounter);
  }
@@ -240,10 +239,10 @@ function Player(name, color, ogLocation, keys) {
         else {
         drawCircle(x, y, wallSize/3, this.playerColor, wallSize/12, this.playerColor); //draw the player.
     }
-        deltaRow = 0;
-        deltaColumn = 0;
-        
-        console.log("row: " + this.playerLocation.row + "column: " + this.playerLocation.column); // prints the current location
+    deltaRow = 0;
+    deltaColumn = 0;
+
+        // console.log("row: " + this.playerLocation.row + "column: " + this.playerLocation.column); // prints the current location
         return this.playerLocation; //returns the location to the variables
 
 
@@ -409,7 +408,7 @@ this.teleport = function () {
 
 	}
 
-	console.log('row: ' + this.playerLocation.row + ' column: ' + this.playerLocation.column );
+	// console.log('row: ' + this.playerLocation.row + ' column: ' + this.playerLocation.column );
 
 
 }
@@ -510,10 +509,6 @@ function drawEnd() {
     // drawPolygon(x, y, wallSize/3, 5, endAngle, endColor);
 }
 
-function winPopup() {
-
-}
-
 
 //this funciton checks if there's a wall in a specific location.
 //used in the moving action for the player and blocks it. 
@@ -555,13 +550,15 @@ function checkWin() {
         }   
     }
 }
+
+// Checks if you're at the door and you're the couple.
 function checkEndGame() {
- if ((playerWonHooray) && (couple.playerLocation.row == 9) && (couple.playerLocation.column == 5)) {
-       stage.addChild(hintText);
-        displayHint();
-        hintText.setText('Congrats you won!');
-        console.log('you won');
-            }
+   if ((playerWonHooray) && (couple.playerLocation.row == 9) && (couple.playerLocation.column == 5)) {
+     stage.addChild(hintText);
+     displayHint();
+     hintText.setText('Congrats you won!');
+        // console.log('you won');
+    }
 }
 
 //changes the maze to the another maze
