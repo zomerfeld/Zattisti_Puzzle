@@ -64,15 +64,24 @@ var endColor = 0xF2F26F;
 
 //SOUNDS
 var soundtrack = new Audio("soundtrack.mp3");
-var break1 = new Audio("break-1.aif");
-var break2 = new Audio("break-2.aif");
-var coupleSound = new Audio("coupleSound.aif");
+var break1 = new Audio("break-1.wav");
+var break1n5 = new Audio("break-1n5.wav");
+var break2 = new Audio("break-2.wav");
+var coupleSound = new Audio("coupleSound.m4v");
 var winSound = new Audio("win.m4a");
+
+
 
 // agency variables
 var lastAction = 'M';
 var agencyCounter = 0; // for testing purposes
 var blockedCounter = 0; // counts hits on a wall by couple character in maze 2
+
+//crack counters
+var crack1 = 1;
+var crack2 = 2;
+var crack3 = 4;
+
 
 var style = {
 	font : '24px Avant Garde',
@@ -148,7 +157,6 @@ function update() {
     checkWin(); 
     // checks if you won the game
     checkEndGame();
-
      // console.log('***BLOCKED*** ' + blockedCounter);
  }
 
@@ -157,7 +165,6 @@ function update() {
 
   	switch (event.keyCode) {
         case 37: // Left Arrow
-        // playSound();
         if (playerWonHooray == false) {mario.moveLeft();}
         if (playerWonHooray == true) {couple.moveLeft();}
         lastAction = 'M';
@@ -240,8 +247,8 @@ function Player(name, color, ogLocation, keys) {
         var y = wallStartY + this.playerLocation.row * wallSize + wallSize/2;  
 
         if (this.name == 'Couple') {
-            drawCircle(x, y, wallSize/3 - 5, mario.playerColor, wallSize/12 - 5, this.playerColor); //draw the player.
-            drawCircle(x + 20, y, wallSize/3 - 5, peach.playerColor, wallSize/12 - 5, this.playerColor); //draw the player.
+            drawCircle(x - 3, y, wallSize/3 - 5, mario.playerColor, wallSize/12 - 5, this.playerColor); //draw the player.
+            drawCircle(x + 6, y, wallSize/3 - 5, peach.playerColor, wallSize/12 - 5, this.playerColor); //draw the player.
         }
         else {
         drawCircle(x, y, wallSize/3, this.playerColor, wallSize/12, this.playerColor); //draw the player.
@@ -266,19 +273,23 @@ function Player(name, color, ogLocation, keys) {
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
     	deltaRow = 0;
     	deltaColumn = 0;
+    }
+    if (isWall(nr, nc)) {
     	blockedCounter += 1;
-        break1.play(); // plays blocked sound
     // console.log('***BLOCKED***');
-    if (blockedCounter > 1 && playerWonHooray == true) {
-		// console.log('y new ' + nr);
-		// console.log('x new ' + nc);
+    if (blockedCounter > crack1 && playerWonHooray == true) {
+        break1.play(); // plays blocked sound
+    }
+      if (blockedCounter > crack2 && playerWonHooray == true) {
+        break1n5.play(); // plays blocked sound
+    }
+    if (blockedCounter > crack3 && playerWonHooray == true) {
+        break2.play(); // plays blocked sound
 		var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
 		// console.log('wall to replace ' + formulaWallReplace);
 		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
 		buildMaze(); // rebuilds maze once wall is broken
-        break2.play(); // plays wall break sound
 	}
-
 } else {
     	blockedCounter = 0; // resets blockedCounter if player moves sucessfully
     }
@@ -302,23 +313,27 @@ this.moveLeft = function() {
     var nr = this.playerLocation.row + deltaRow;
     var nc = this.playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-    	deltaRow = 0;
-    	deltaColumn = 0;
-    	blockedCounter += 1;
-        break1.play(); // plays blocked sound
+        deltaRow = 0;
+        deltaColumn = 0;
+    }
+    if (isWall(nr, nc)) {
+        blockedCounter += 1;
     // console.log('***BLOCKED***');
-    if (blockedCounter > 6 && playerWonHooray == true) {
-		// console.log('y new ' + nr);
-		// console.log('x new ' + nc);
-		var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
-		// console.log('wall to replace ' + formulaWallReplace);
-		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
-		buildMaze(); // rebuilds maze once wall is broken
-        break2.play(); // plays wall break sound
-	}
-
+    if (blockedCounter > crack1 && playerWonHooray == true) {
+        break1.play(); // plays blocked sound
+    }
+      if (blockedCounter > crack2 && playerWonHooray == true) {
+        break1n5.play(); // plays blocked sound
+    }
+    if (blockedCounter > crack3 && playerWonHooray == true) {
+        break2.play(); // plays blocked sound
+        var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
+        // console.log('wall to replace ' + formulaWallReplace);
+        maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
+        buildMaze(); // rebuilds maze once wall is broken
+    }
 } else {
-    	blockedCounter = 0; // resets blockedCounter if player moves sucessfully
+        blockedCounter = 0; // resets blockedCounter if player moves sucessfully
     }
 
     this.playerLocation = {
@@ -340,23 +355,27 @@ this.moveUp = function() {
     var nr = this.playerLocation.row + deltaRow;
     var nc = this.playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-    	deltaRow = 0;
-    	deltaColumn = 0;
-    	blockedCounter += 1;
+        deltaRow = 0;
+        deltaColumn = 0;
+    }
+    if (isWall(nr, nc)) {
+        blockedCounter += 1;
+    // console.log('***BLOCKED***');
+    if (blockedCounter > crack1 && playerWonHooray == true) {
         break1.play(); // plays blocked sound
-      // console.log('***BLOCKED***');
-      if (blockedCounter > 6 && playerWonHooray == true) {
-		// console.log('y new ' + nr);
-		// console.log('x new ' + nc);
-		var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
-		// console.log('wall to replace ' + formulaWallReplace);
-		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
-		buildMaze(); // rebuilds maze once wall is broken
-        break2.play(); // plays wall break sound
-	}
-
+    }
+      if (blockedCounter > crack2 && playerWonHooray == true) {
+        break1n5.play(); // plays blocked sound
+    }
+    if (blockedCounter > crack3 && playerWonHooray == true) {
+        break2.play(); // plays blocked sound
+        var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
+        // console.log('wall to replace ' + formulaWallReplace);
+        maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
+        buildMaze(); // rebuilds maze once wall is broken
+    }
 } else {
-    	blockedCounter = 0; // resets blockedCounter if player moves sucessfully
+        blockedCounter = 0; // resets blockedCounter if player moves sucessfully
     }
 
     this.playerLocation = {
@@ -378,23 +397,27 @@ this.moveDown = function() {
     var nr = this.playerLocation.row + deltaRow;
     var nc = this.playerLocation.column + deltaColumn;
     if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-    	deltaRow = 0;
-    	deltaColumn = 0;
-    	blockedCounter += 1;
+        deltaRow = 0;
+        deltaColumn = 0;
+    }
+    if (isWall(nr, nc)) {
+        blockedCounter += 1;
+    // console.log('***BLOCKED***');
+    if (blockedCounter > crack1 && playerWonHooray == true) {
         break1.play(); // plays blocked sound
-        // console.log('***BLOCKED***');
-        if (blockedCounter > 6 && playerWonHooray == true) {
-		// console.log('y new ' + nr);
-		// console.log('x new ' + nc);
-		var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
-		// console.log('wall to replace ' + formulaWallReplace);
-		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
-		buildMaze(); // rebuilds maze once wall is broken
-        break2.play(); // plays wall break sound
-	}
-
+    }
+      if (blockedCounter > crack2 && playerWonHooray == true) {
+        break1n5.play(); // plays blocked sound
+    }
+    if (blockedCounter > crack3 && playerWonHooray == true) {
+        break2.play(); // plays blocked sound
+        var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
+        // console.log('wall to replace ' + formulaWallReplace);
+        maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
+        buildMaze(); // rebuilds maze once wall is broken
+    }
 } else {
-    	blockedCounter = 0; // resets blockedCounter if player moves sucessfully
+        blockedCounter = 0; // resets blockedCounter if player moves sucessfully
     }
 
     this.playerLocation = {
@@ -534,8 +557,8 @@ function isWall(r, c) {
 
 //changes the conditions if the player won.
 function checkWin() { 
-    if (playerWonHooray) // if already won, skip the rest of the function
-    	return;
+    if (playerWonHooray) // if already won, skip the rest of the function    	
+        return;
     if ((marioLocation.column == peachLocation.column) && (marioLocation.row == peachLocation.row)) { //if they meet!
         if (lastAction == 'M') { //If Mario moved last. 
         	peach.teleport();
@@ -569,8 +592,8 @@ function checkEndGame() {
  if ((playerWonHooray) && (couple.playerLocation.row == 9) && (couple.playerLocation.column == 5)) {
    stage.addChild(hintText);
    displayHint();
-   hintText.setText('Congrats you won!');
-    winSound.play();
+   hintText.text = 'Congrats you won!';
+   winSound.play();
     }
 }
 
