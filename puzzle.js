@@ -215,8 +215,8 @@ function update() {
         break;
 
         case 84: // T for Teleport -- Disable before production
-        // peach.teleport();
-        // lastAction = 'P';
+        peach.teleport();
+        lastAction = 'P';
         break;
 
 
@@ -265,42 +265,42 @@ function Player(name, color, ogLocation, keys) {
 
     this.moveRight = function() {
     	deltaColumn = +1;
+        // Look at the location we want to move to. if it's out of bounds or
+        // there's a wall, cancel the move.
+        var nr = this.playerLocation.row + deltaRow;
+        var nc = this.playerLocation.column + deltaColumn;
 
-    // Look at the location we want to move to. if it's out of bounds or
-    // there's a wall, cancel the move.
-    var nr = this.playerLocation.row + deltaRow;
-    var nc = this.playerLocation.column + deltaColumn;
-    if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
-    	deltaRow = 0;
-    	deltaColumn = 0;
-    }
-    if (isWall(nr, nc)) {
-    	blockedCounter += 1;
-    // console.log('***BLOCKED***');
-    if (blockedCounter > crack1 && playerWonHooray == true) {
-        break1.play(); // plays blocked sound
-    }
-      if (blockedCounter > crack2 && playerWonHooray == true) {
-        break1n5.play(); // plays blocked sound
-    }
-    if (blockedCounter > crack3 && playerWonHooray == true) {
-        break2.play(); // plays blocked sound
-		var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
-		// console.log('wall to replace ' + formulaWallReplace);
-		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
-		buildMaze(); // rebuilds maze once wall is broken
-	}
-} else {
-    	blockedCounter = 0; // resets blockedCounter if player moves sucessfully
-    }
+        if (nr<0 || nr>=rows || nc<0 || nc>=columns || isWall(nr, nc)) {
+        	deltaRow = 0;
+        	deltaColumn = 0;
+        }
+        if (isWall(nr, nc) && !(nr<0) && !(nr>=rows) && !(nc<0) && !(nc>=columns)) {
+        	blockedCounter += 1;
+        // console.log('***BLOCKED***');
+        if (blockedCounter > crack1 && playerWonHooray == true) {
+            break1.play(); // plays blocked sound
+        }
+          if (blockedCounter > crack2 && playerWonHooray == true) {
+            break1n5.play(); // plays blocked sound
+        }
+        if (blockedCounter > crack3 && playerWonHooray == true) {
+            break2.play(); // plays blocked sound
+    		var formulaWallReplace = nr * columns + nc; // formula that is used to create the walls
+    		// console.log('wall to replace ' + formulaWallReplace);
+    		maze = maze.replaceAt(formulaWallReplace, " "); // replace old maze with new maze that has broken wall
+    		buildMaze(); // rebuilds maze once wall is broken
+    	}
+    } else {
+        	blockedCounter = 0; // resets blockedCounter if player moves sucessfully
+        }
 
-    this.playerLocation = {
-    	'row': this.playerLocation.row + deltaRow,
-    	'column': this.playerLocation.column + deltaColumn
-    }
+        this.playerLocation = {
+        	'row': this.playerLocation.row + deltaRow,
+        	'column': this.playerLocation.column + deltaColumn
+        }
 
-    // console.log('moved right');
-    // console.log(playerLocation);
+        // console.log('moved right');
+        // console.log(playerLocation);
 };
 
 
@@ -316,7 +316,7 @@ this.moveLeft = function() {
         deltaRow = 0;
         deltaColumn = 0;
     }
-    if (isWall(nr, nc)) {
+    if (isWall(nr, nc) && !(nr<0) && !(nr>=rows) && !(nc<0) && !(nc>=columns)) {
         blockedCounter += 1;
     // console.log('***BLOCKED***');
     if (blockedCounter > crack1 && playerWonHooray == true) {
@@ -358,7 +358,7 @@ this.moveUp = function() {
         deltaRow = 0;
         deltaColumn = 0;
     }
-    if (isWall(nr, nc)) {
+    if (isWall(nr, nc) && !(nr<0) && !(nr>=rows) && !(nc<0) && !(nc>=columns)) {
         blockedCounter += 1;
     // console.log('***BLOCKED***');
     if (blockedCounter > crack1 && playerWonHooray == true) {
@@ -400,7 +400,7 @@ this.moveDown = function() {
         deltaRow = 0;
         deltaColumn = 0;
     }
-    if (isWall(nr, nc)) {
+    if (isWall(nr, nc) && !(nr<0) && !(nr>=rows) && !(nc<0) && !(nc>=columns)) {
         blockedCounter += 1;
     // console.log('***BLOCKED***');
     if (blockedCounter > crack1 && playerWonHooray == true) {
