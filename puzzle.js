@@ -215,8 +215,8 @@ function update() {
         break;
 
         case 84: // T for Teleport -- Disable before production
-        peach.teleport();
-        lastAction = 'P';
+        // peach.teleport();
+        // lastAction = 'P';
         break;
 
 
